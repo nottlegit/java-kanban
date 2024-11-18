@@ -3,8 +3,8 @@ package task.tracker;
 import java.util.Objects;
 
 public class Task {
-    private final String title;
-    private TaskStatus taskStatus;
+    protected  final String title;
+    protected  TaskStatus taskStatus;
 
     public Task(String title) {
         this.title = title;
@@ -33,5 +33,13 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(title, taskStatus);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", taskStatus=" + taskStatus +
+                '}';
     }
 }
