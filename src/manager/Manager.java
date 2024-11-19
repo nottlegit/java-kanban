@@ -50,4 +50,25 @@ public class Manager {
         }
         return listEpicSubtasks;
     }
+
+    public void deleteAllTasks(TaskStatus taskstatus) {
+        allTasks.put(taskstatus, new HashMap<>());
+    }
+
+    public Object getTaskById(TaskStatus taskStatus, Integer idTask) {
+        return  allTasks.get(taskStatus).get(idTask);
+    }
+
+    public void updateTask(Object object) {
+        this.addTask(object);
+    }
+
+    public void deleteById(TaskStatus taskStatus, Integer idTask) {
+        allTasks.get(taskStatus).remove(idTask);
+    }
+
+    public void setStatusTask(TaskStatus newTaskStatus, Object object) {
+        //TODO с помощью switch определить к какому классу относится объект, если это subtask то
+        //TODO нужно будет провалиться в эпик и изменить также статус эпика
+    }
 }

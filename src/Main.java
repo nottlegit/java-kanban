@@ -10,10 +10,12 @@ public class Main {
         Epic epic1 = new Epic("Сборка пк");
         Epic epic2 = new Epic("Переезд");
         epic1.addNewSubtask("Купить запчасти");
+        epic1.addNewSubtask("Купить запчасти");
+        epic1.addNewSubtask("Купить моник");
 
         manager.addTask(task1);
         manager.addTask(epic1);
-
+        //manager.deleteById(task1.getTaskStatus(),task1.hashCode());
         System.out.println(manager.getListTasks());
 
         System.out.println(task1.equals(epic2));
@@ -24,5 +26,10 @@ public class Main {
         System.out.println(epic2.hashCode());
 
         System.out.println(manager.getListEpicSubtasks(TaskStatus.NEW, epic1.hashCode()));
+        System.out.println(manager.getTaskById(TaskStatus.NEW, -280801830));
+
+        manager.deleteAllTasks(TaskStatus.NEW);
+        System.out.println(manager.getListTasks());
+
     }
 }
