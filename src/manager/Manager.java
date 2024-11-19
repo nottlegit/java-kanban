@@ -13,8 +13,8 @@ public class Manager {
         }
     }
 
-    public void addTask(Object o) {
-        allTasks.get(TaskStatus.NEW).put(o.hashCode(), o);
+    public void addTask(Object object) {
+        allTasks.get(TaskStatus.NEW).put(object.hashCode(), object);
     }
 
     public ArrayList<String> getListTasks() {
@@ -23,7 +23,6 @@ public class Manager {
         for (TaskStatus taskStatus : allTasks.keySet()) {
             listTasks.add(taskStatus.toString());
             for (Object o : allTasks.get(taskStatus).values()) {
-                //listTasks.add(((Task) o).getTitle());
                 listTasks.add(o.toString());
                 if (o instanceof Epic) {
                     listTasks.addAll(getListEpicSubtasks(taskStatus, ((Epic) o).hashCode()));
@@ -43,7 +42,6 @@ public class Manager {
             if (object instanceof Epic) {
                 Epic epic = (Epic) object;
                 for (Subtask subtask : epic.getSubtasks().values()) {
-                    //listEpicSubtasks.add(subtask.getTitle());
                     listEpicSubtasks.add(subtask.toString());
                 }
             }
@@ -68,7 +66,39 @@ public class Manager {
     }
 
     public void setStatusTask(TaskStatus newTaskStatus, Object object) {
-        //TODO с помощью switch определить к какому классу относится объект, если это subtask то
-        //TODO нужно будет провалиться в эпик и изменить также статус эпика
+        //TODO Работает некорректно
+        if (object instanceof Subtask) {
+            Subtask subtask = (Subtask) object;
+            Epic epic = (Epic) allTasks.get(subtask.getTaskStatus()).get(subtask.getIdEpic());
+            TaskStatus lastStatus = epic.getTaskStatus();
+            Integer lastId = epic.hashCode();
+
+            subtask.setTaskStatus(newTaskStatus);
+            if (epic.isStatusTaskChanged()) {
+                System.out.println(true);
+                this.moveTask(epic, lastStatus, lastId);
+            }
+        } else if (object instanceof Epic) {
+            return;
+        } else {
+            Task task = (Task) object;
+            TaskStatus lastStatus = task.getTaskStatus();
+
+            if (!newTaskStatus.equals(lastStatus)) {
+                Integer lastId = task.hashCode();
+
+                task.setTaskStatus(newTaskStatus);
+                moveTask(task, lastStatus, lastId);
+            }
+        }
+    }
+
+    private void moveTask(Task task, TaskStatus lastStatus, Integer lastId) {
+        allTasks.get(task.getTaskStatus()).put(task.hashCode(), task);
+        this.deleteById(lastStatus, lastId);
+    }
+
+    public Subtask addSubtaskInEpic(Epic epic, String titleSubtask) {
+        return epic.addNewSubtask(titleSubtask);
     }
 }
