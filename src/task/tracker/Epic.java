@@ -10,6 +10,10 @@ public class Epic extends Task {
         this.listSubtasks = new ArrayList<>();
     }
 
+    public Epic(Task task) {
+        this(task.title, task.description, task.status);
+    }
+
     public ArrayList<Integer> getListSubtasks() {
         return listSubtasks;
     }
