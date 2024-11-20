@@ -32,7 +32,7 @@ public class Main {
         System.out.println("\nУдаляем все задачи");
         manager.deleteAllTasks();
         System.out.println(manager.getListTasks());
-        //---------------------------------------
+
         Epic epic1 = new Epic(task1);
         Epic epic2 = new Epic(task2);
         Epic epic3 = new Epic(task3);
@@ -103,7 +103,5 @@ public class Main {
         System.out.println("\nУдаление всех эпиков");
         manager.deleteAllEpics();
         System.out.println(manager.getListEpics());
-
-
     }
 }

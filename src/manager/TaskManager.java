@@ -46,8 +46,6 @@ public class TaskManager {
         tasks.remove(id);
     }
 
-    //EPIC
-
     public ArrayList<Epic> getListEpics() {
         return new ArrayList<>(epics.values());
     }
@@ -86,8 +84,6 @@ public class TaskManager {
         }
         return listSubtasks;
     }
-
-    // Subtasks
 
     public ArrayList<Subtask> getListSubtasks() {
         return new ArrayList<>(subtasks.values());
