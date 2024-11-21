@@ -1,9 +1,9 @@
-package task.tracker;
+package task_tracker;
 
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    ArrayList<Integer> listSubtasks;
+    private ArrayList<Integer> listSubtasks;
 
     public Epic(String title, String description, Status status) {
         super(title, description, status);

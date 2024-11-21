@@ -1,8 +1,8 @@
 import manager.TaskManager;
-import task.tracker.Epic;
-import task.tracker.Status;
-import task.tracker.Subtask;
-import task.tracker.Task;
+import task_tracker.Epic;
+import task_tracker.Status;
+import task_tracker.Subtask;
+import task_tracker.Task;
 
 public class Main {
 

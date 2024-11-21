@@ -1,18 +1,18 @@
 package manager;
 
-import task.tracker.Epic;
-import task.tracker.Status;
-import task.tracker.Subtask;
-import task.tracker.Task;
+import task_tracker.Epic;
+import task_tracker.Status;
+import task_tracker.Subtask;
+import task_tracker.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
-    HashMap<Integer, Task> tasks;
-    HashMap<Integer, Epic> epics;
-    HashMap<Integer, Subtask> subtasks;
-    int nextId;
+    private HashMap<Integer, Task> tasks;
+    private HashMap<Integer, Epic> epics;
+    private HashMap<Integer, Subtask> subtasks;
+    private int nextId;
 
     public TaskManager() {
         tasks = new HashMap<>();
