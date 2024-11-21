@@ -128,8 +128,8 @@ public class TaskManager {
         if (indexToRemove != -1) {
             listSubtasks.remove(indexToRemove);
         }
+        changeStatusEpic(epics.get(subtask.getIdEpic()));
         subtasks.remove(idSubtask);
-        changeStatusEpic(epics.get(idSubtask));
     }
 
     private void addIdSubtaskToEpic(int idEpic, int idSubtask) {
