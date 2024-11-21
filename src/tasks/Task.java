@@ -1,4 +1,4 @@
-package task_tracker;
+package tasks;
 
 import java.util.Objects;
 
@@ -50,18 +50,17 @@ public class Task {
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return id == task.id && Objects.equals(title, task.title) &&
-                Objects.equals(description, task.description) && status == task.status;
+        return id == task.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, status);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return "task_tracker.Task{" +
+        return "tasks.Task{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +

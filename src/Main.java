@@ -1,8 +1,8 @@
 import manager.TaskManager;
-import task_tracker.Epic;
-import task_tracker.Status;
-import task_tracker.Subtask;
-import task_tracker.Task;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 public class Main {
 
@@ -101,7 +101,12 @@ public class Main {
         System.out.println(manager.getListSubtasks());
 
         System.out.println("\nУдаление всех эпиков");
+        manager.addSubtask(subtask1);
+        manager.addSubtask(subtask2);
+        manager.addSubtask(subtask3);
+        manager.addSubtask(subtask4);
         manager.deleteAllEpics();
         System.out.println(manager.getListEpics());
+        System.out.println(manager.getListSubtasks());
     }
 }

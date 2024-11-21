@@ -1,9 +1,9 @@
 package manager;
 
-import task_tracker.Epic;
-import task_tracker.Status;
-import task_tracker.Subtask;
-import task_tracker.Task;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +51,7 @@ public class TaskManager {
     }
 
     public void deleteAllEpics() {
+        subtasks = new HashMap<>();
         epics = new HashMap<>();
     }
 
@@ -92,6 +93,7 @@ public class TaskManager {
     public void deleteAllSubtasks() {
         for (Epic epic : epics.values()) {
             epic.setListSubtasks(new ArrayList<>());
+            changeStatusEpic(epic);
         }
         subtasks = new HashMap<>();
     }
@@ -127,6 +129,7 @@ public class TaskManager {
             listSubtasks.remove(indexToRemove);
         }
         subtasks.remove(idSubtask);
+        changeStatusEpic(epics.get(idSubtask));
     }
 
     private void addIdSubtaskToEpic(int idEpic, int idSubtask) {
