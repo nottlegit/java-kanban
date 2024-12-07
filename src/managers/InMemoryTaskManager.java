@@ -1,4 +1,4 @@
-package manager;
+package managers;
 
 import tasks.Epic;
 import tasks.Status;
@@ -13,14 +13,15 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks;
     private HashMap<Integer, Epic> epics;
     private HashMap<Integer, Subtask> subtasks;
+    private final InMemoryHistoryManager historyManager;
     private int nextId;
 
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subtasks = new HashMap<>();
-        this.nextId = 0;
-        this.nextIdByHistory = 0;
+        historyManager = new InMemoryHistoryManager();
+        nextId = 0;
     }
 
     @Override
@@ -35,7 +36,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int id) {
-        return tasks.get(id);
+        Task task = tasks.get(id);
+        historyManager.add(task);
+        return task;
     }
 
     @Override
@@ -67,7 +70,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpicById(int idEpic) {
-        return epics.get(idEpic);
+        Epic epic = epics.get(idEpic);
+        historyManager.add(epic);
+        return epic;
     }
 
     @Override
@@ -117,7 +122,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask getSubtaskById(int idSubtasks) {
-        return subtasks.get(idSubtasks);
+        Subtask subtask = subtasks.get(idSubtasks);
+        historyManager.add(subtask);
+        return subtask;
     }
 
     @Override
@@ -154,16 +161,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public <T extends Task> List<T> getHistory() {
-        return listHistory;
-    }
-
-    private <T extends Task> void updateHistory(T task) {
-        if (nextIdByHistory == 9) {
-            nextIdByHistory = 0;
-        }
-        listHistory.add(nextIdByHistory, task);
-        nextIdByHistory++;
+    public List<Task> getHistory() {
+        return historyManager.getListHistory();
     }
 
     private void addIdSubtaskToEpic(int idEpic, int idSubtask) {

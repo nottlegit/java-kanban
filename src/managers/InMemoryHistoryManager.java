@@ -1,4 +1,4 @@
-package manager;
+package managers;
 
 import tasks.Task;
 
@@ -8,7 +8,7 @@ import java.util.List;
 public class InMemoryHistoryManager implements HistoryManager {
     private final static int MAX_INDEX_LIST_HISTORY = 9;
     private int nextIdByHistory;
-    List<Task> listHistory;
+    private final List<Task> listHistory;
 
     public InMemoryHistoryManager() {
         this.listHistory = new ArrayList<>();
@@ -16,15 +16,16 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public  void  add(T task) {
+    public void add(Task task) {
         if (nextIdByHistory == MAX_INDEX_LIST_HISTORY) {
             nextIdByHistory = 0;
         }
         listHistory.add(nextIdByHistory, task);
+        nextIdByHistory++;
     }
 
     @Override
-    public <T extends Task> List<T> getListHistory() {
+    public List<Task> getListHistory() {
         return listHistory;
     }
 }
