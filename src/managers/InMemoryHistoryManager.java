@@ -17,10 +17,15 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if (nextIdByHistory == MAX_INDEX_LIST_HISTORY) {
+        if (nextIdByHistory > MAX_INDEX_LIST_HISTORY) {
             nextIdByHistory = 0;
         }
-        listHistory.add(nextIdByHistory, task);
+
+        if (listHistory.size() > nextIdByHistory) {
+            listHistory.set(nextIdByHistory, task);
+        } else {
+            listHistory.add(nextIdByHistory, task);
+        }
         nextIdByHistory++;
     }
 

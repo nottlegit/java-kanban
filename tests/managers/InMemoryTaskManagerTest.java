@@ -57,7 +57,9 @@ class InMemoryTaskManagerTest {
         manager.add(task1);
         manager.add(task2);
         manager.add(epic1);
-        manager.add(epic1);
+        manager.add(epic2);
+        subtask1 = new Subtask("subtask1", "Описание..", Status.NEW, epic1.getId());
+        subtask2 = new Subtask("subtask2", "Описание..", Status.NEW, epic2.getId());
         manager.add(subtask1);
         manager.add(subtask2);
 
