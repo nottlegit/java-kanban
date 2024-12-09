@@ -4,6 +4,7 @@ import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
+import util.Managers;
 
 public class Main {
 
@@ -109,5 +110,30 @@ public class Main {
         manager.deleteAllEpics();
         System.out.println(manager.getListEpics());
         System.out.println(manager.getListSubtasks());
+        // sprint5
+        System.out.println("---------------------------");
+        manager = Managers.getDefault();
+        manager.add(task1);
+        manager.add(task2);
+        manager.add(task3);
+        manager.add(epic1);
+        manager.add(epic2);
+        manager.add(epic3);
+
+        manager.getTaskById(task1.getId());
+        manager.getEpicById(epic1.getId());
+        manager.getTaskById(task1.getId());
+        manager.getEpicById(epic1.getId());
+        manager.getTaskById(task1.getId());
+        manager.getEpicById(epic1.getId());
+        manager.getTaskById(task1.getId());
+        manager.getEpicById(epic1.getId());
+        manager.getTaskById(task1.getId());
+        manager.getEpicById(epic1.getId());
+        manager.getTaskById(task1.getId());
+        manager.getEpicById(epic1.getId());
+        manager.deleteEpicById(epic1.getId());
+        System.out.println(manager.getHistory());
+        System.out.println(manager.getHistory().size());
     }
 }
