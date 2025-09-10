@@ -1,3 +1,4 @@
+import managers.InMemoryHistoryManager;
 import managers.InMemoryTaskManager;
 import managers.TaskManager;
 import tasks.Epic;
@@ -5,6 +6,9 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 import util.Managers;
+
+import java.util.List;
+import java.util.Objects;
 
 public class Main {
 
@@ -135,5 +139,31 @@ public class Main {
         manager.deleteEpicById(epic1.getId());
         System.out.println(manager.getHistory());
         System.out.println(manager.getHistory().size());
+
+        System.out.println("////////////////");
+        System.out.println("////////////////");
+        System.out.println();
+
+        InMemoryHistoryManager manager1 = new InMemoryHistoryManager();
+
+        Task task11 = new Task("11", "Описание..", Status.DONE);
+        Task task12 = new Task("12", "Описание..", Status.DONE);
+        Task task13 = new Task("13", "Описание..", Status.DONE);
+
+        task11.setId(11);
+        task12.setId(12);
+        task13.setId(13);
+
+        manager1.add(task11);
+        manager1.add(task12);
+        manager1.add(task13);
+        manager1.add(task13);
+
+        System.out.println(manager1.getHistory());
+        System.out.println(manager1.getListNodes());
+
+
+        System.out.println("33333333");
+        manager1.printNodes();
     }
 }
