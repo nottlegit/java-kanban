@@ -43,7 +43,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             return;
         }
         if (mapHistory.containsKey(task.getId())) {
-            remove(task.getId());
+            remove(task);
         }
 
         final Node<Task> oldTail = tail;
@@ -58,7 +58,36 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     }
 
-    private void remove(int id) {
+    @Override
+    public List<Task> getHistory() {
+        List<Task> listTask = new ArrayList<>();
+        Node<Task> current = head;
+        while (current != null) {
+            listTask.add(current.data);
+            current = current.next;
+        }
+        return listTask;
+    }
+
+    public List<Node<Task>> getListNodes() {
+        return new ArrayList<>(mapHistory.values());
+    }
+
+    public void printNodes() {
+        for (Node<Task> node : mapHistory.values()) {
+            String message = "data: " + node.data
+                    + " prev: " + node.prev
+                    + " next: " + node.next;
+            System.out.println(message);
+        }
+    }
+
+    @Override
+    public void remove(Task task) {
+        if (task == null || !mapHistory.containsKey(task.getId())) {
+            return;
+        }
+        int id = task.getId();
         Node<Task> node = mapHistory.get(id);
         Node<Task> prev = node.prev;
         Node<Task> next = node.next;
@@ -85,33 +114,5 @@ public class InMemoryHistoryManager implements HistoryManager {
         prev.next = next;
         next.prev = prev;
         mapHistory.remove(id);
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        List<Task> listTask = new ArrayList<>();
-
-        for (Node<Task> node : mapHistory.values()) {
-            listTask.add(node.data);
-        }
-        return listTask;
-    }
-
-    public List<Node<Task>> getListNodes() {
-        return new ArrayList<>(mapHistory.values());
-    }
-
-    public void printNodes() {
-        for (Node<Task> node : mapHistory.values()) {
-            String message = "data: " + node.data
-                    + " prev: " + node.prev
-                    + " next: " + node.next;
-            System.out.println(message);
-        }
-    }
-
-    @Override
-    public void remove(Task task) {
-
     }
 }
