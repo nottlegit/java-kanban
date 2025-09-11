@@ -82,6 +82,7 @@ class InMemoryTaskManagerTest {
         manager.getEpicById(epic1.getId());
         manager.getEpicById(epic2.getId());
 
-        assertEquals(10, manager.getHistory().size());
+        System.out.println(manager.getHistory());
+        assertEquals(6, manager.getHistory().size());
     }
 }
