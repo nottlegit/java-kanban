@@ -45,7 +45,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (mapHistory.containsKey(task.getId())) {
             remove(task);
         }
+        linkLast(task);
+    }
 
+    private void linkLast(Task task) {
         final Node<Task> oldTail = tail;
         final Node<Task> newNode = new Node<>(tail, task, null);
         tail = newNode;
@@ -55,7 +58,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             oldTail.next = newNode;
 
         mapHistory.put(task.getId(), newNode);
-
     }
 
     @Override
