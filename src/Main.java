@@ -122,11 +122,11 @@ public class Main {
 
         manager.getTaskById(task1.getId());
         manager.getEpicById(epic1.getId());
-        manager.getTaskById(task1.getId());
-        manager.getEpicById(epic1.getId());
-        manager.getTaskById(task1.getId());
-        manager.getEpicById(epic1.getId());
-        manager.getTaskById(task1.getId());
+        manager.getTaskById(task2.getId());
+        manager.getEpicById(epic2.getId());
+        manager.getTaskById(task3.getId());
+        manager.getEpicById(epic3.getId());
+        manager.getTaskById(task3.getId());
         manager.getEpicById(epic1.getId());
         manager.getTaskById(task1.getId());
         manager.getEpicById(epic1.getId());
