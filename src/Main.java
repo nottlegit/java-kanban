@@ -1,3 +1,4 @@
+import managers.FileBackedTaskManager;
 import managers.InMemoryTaskManager;
 import managers.TaskManager;
 import tasks.Epic;
@@ -5,6 +6,8 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 import util.Managers;
+
+import java.io.File;
 
 public class Main {
 
@@ -135,5 +138,65 @@ public class Main {
         manager.deleteEpicById(epic1.getId());
         System.out.println(manager.getHistory());
         System.out.println(manager.getHistory().size());
+
+        // Спринт 7
+
+        System.out.println("Проверка работоспособности нового менеджера задачь");
+
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
+
+        Task task71 = new Task("Ремонт", "Описание..", Status.DONE);
+        Task task72 = new Task("Уборка", "Описание..", Status.NEW);
+        Task task73 = new Task("Переезд", "Описание..", Status.NEW);
+
+        System.out.println("Добавляем первые задачи");
+        fileBackedTaskManager.add(task71);
+        fileBackedTaskManager.add(task72);
+        fileBackedTaskManager.add(task73);
+        fileBackedTaskManager.deleteTaskById(task72.getId());
+        task72.setId(task1.getId());
+        fileBackedTaskManager.update(task72);
+
+        Epic epic71 = new Epic(task71);
+        Epic epic72 = new Epic(task72);
+        Epic epic73 = new Epic(task73);
+
+        fileBackedTaskManager.add(epic71);
+        fileBackedTaskManager.add(epic72);
+        fileBackedTaskManager.add(epic73);
+        fileBackedTaskManager.deleteEpicById(epic73.getId());
+
+        Subtask subtask71 = new Subtask("Купить материалы", "Описание..", Status.NEW, epic71.getId());
+        Subtask subtask72 = new Subtask("Нанять строителей", "Описание..", Status.NEW, epic71.getId());
+        fileBackedTaskManager.add(subtask71);
+        fileBackedTaskManager.add(subtask72);
+
+        subtask71 = new Subtask("Subtask71", "Описание..", Status.NEW, epic72.getId());
+        subtask72 = new Subtask("Subtask72", "Описание..", Status.NEW, epic72.getId());
+        fileBackedTaskManager.add(subtask71);
+        fileBackedTaskManager.add(subtask72);
+        fileBackedTaskManager.deleteSubtaskById(subtask71.getId());
+
+        System.out.println();
+        System.out.println("Проверка восстановления состояния из файла");
+        System.out.println("Состояние до \n");
+        System.out.println(fileBackedTaskManager.getListTasks());
+        System.out.println();
+        System.out.println(fileBackedTaskManager.getListSubtasks());
+        System.out.println();
+        System.out.println(fileBackedTaskManager.getListEpics());
+
+        FileBackedTaskManager newFileBackedTaskManager = fileBackedTaskManager.loadFromFile(
+                new File("manager_status.csv")
+        );
+
+        System.out.println();
+        System.out.println("Состояние после");
+        System.out.println(newFileBackedTaskManager.getListTasks());
+        System.out.println();
+        System.out.println(newFileBackedTaskManager.getListSubtasks());
+        System.out.println();
+        System.out.println(newFileBackedTaskManager.getListEpics());
+
     }
 }
