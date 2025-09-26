@@ -1,8 +1,0 @@
-id,type,name,status,description,epic
-0,TASK,Task0,NEW,Описание..,
-2,TASK,Task2,NEW,Описание..,
-6,SUBTASK,Subtask6,NEW,Описание..,3,
-7,SUBTASK,Subtask7,NEW,Описание..,3,
-9,SUBTASK,Subtask9,NEW,Описание..,4,
-3,EPIC,Epic3,NEW,Описание..,
-4,EPIC,Epic4,NEW,Описание..,
