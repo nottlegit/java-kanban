@@ -1,7 +1,6 @@
 import managers.FileBackedTaskManager;
 import managers.InMemoryTaskManager;
 import managers.TaskManager;
-import managers.exceptions.ManagerSaveException;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -13,7 +12,7 @@ import java.io.File;
 public class Main {
 
     public static void main(String[] args) {
-        /*TaskManager manager = new InMemoryTaskManager();
+        TaskManager manager = new InMemoryTaskManager();
         Task task1 = new Task("Ремонт", "Описание..", Status.DONE);
         Task task2 = new Task("Уборка", "Описание..", Status.NEW);
         Task task3 = new Task("Переезд", "Описание..", Status.NEW);
@@ -138,7 +137,7 @@ public class Main {
         manager.getEpicById(epic1.getId());
         manager.deleteEpicById(epic1.getId());
         System.out.println(manager.getHistory());
-        System.out.println(manager.getHistory().size());*/
+        System.out.println(manager.getHistory().size());
 
         // Спринт 7
 
@@ -146,37 +145,37 @@ public class Main {
 
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
 
-        Task task1 = new Task("Ремонт", "Описание..", Status.DONE);
-        Task task2 = new Task("Уборка", "Описание..", Status.NEW);
-        Task task3 = new Task("Переезд", "Описание..", Status.NEW);
+        Task task71 = new Task("Ремонт", "Описание..", Status.DONE);
+        Task task72 = new Task("Уборка", "Описание..", Status.NEW);
+        Task task73 = new Task("Переезд", "Описание..", Status.NEW);
 
         System.out.println("Добавляем первые задачи");
-        fileBackedTaskManager.add(task1);
-        fileBackedTaskManager.add(task2);
-        fileBackedTaskManager.add(task3);
-        fileBackedTaskManager.deleteTaskById(task2.getId());
-        task2.setId(task1.getId());
-        fileBackedTaskManager.update(task2);
+        fileBackedTaskManager.add(task71);
+        fileBackedTaskManager.add(task72);
+        fileBackedTaskManager.add(task73);
+        fileBackedTaskManager.deleteTaskById(task72.getId());
+        task72.setId(task1.getId());
+        fileBackedTaskManager.update(task72);
 
-        Epic epic1 = new Epic(task1);
-        Epic epic2 = new Epic(task2);
-        Epic epic3 = new Epic(task3);
+        Epic epic71 = new Epic(task71);
+        Epic epic72 = new Epic(task72);
+        Epic epic73 = new Epic(task73);
 
-        fileBackedTaskManager.add(epic1);
-        fileBackedTaskManager.add(epic2);
-        fileBackedTaskManager.add(epic3);
-        fileBackedTaskManager.deleteEpicById(epic3.getId());
+        fileBackedTaskManager.add(epic71);
+        fileBackedTaskManager.add(epic72);
+        fileBackedTaskManager.add(epic73);
+        fileBackedTaskManager.deleteEpicById(epic73.getId());
 
-        Subtask subtask1 = new Subtask("Купить материалы", "Описание..", Status.NEW, epic1.getId());
-        Subtask subtask2 = new Subtask("Нанять строителей", "Описание..", Status.NEW, epic1.getId());
-        fileBackedTaskManager.add(subtask1);
-        fileBackedTaskManager.add(subtask2);
+        Subtask subtask71 = new Subtask("Купить материалы", "Описание..", Status.NEW, epic71.getId());
+        Subtask subtask72 = new Subtask("Нанять строителей", "Описание..", Status.NEW, epic71.getId());
+        fileBackedTaskManager.add(subtask71);
+        fileBackedTaskManager.add(subtask72);
 
-        subtask1 = new Subtask("Subtask1", "Описание..", Status.NEW, epic2.getId());
-        subtask2 = new Subtask("Subtask2", "Описание..", Status.NEW, epic2.getId());
-        fileBackedTaskManager.add(subtask1);
-        fileBackedTaskManager.add(subtask2);
-        fileBackedTaskManager.deleteSubtaskById(subtask1.getId());
+        subtask71 = new Subtask("Subtask71", "Описание..", Status.NEW, epic72.getId());
+        subtask72 = new Subtask("Subtask72", "Описание..", Status.NEW, epic72.getId());
+        fileBackedTaskManager.add(subtask71);
+        fileBackedTaskManager.add(subtask72);
+        fileBackedTaskManager.deleteSubtaskById(subtask71.getId());
 
         System.out.println();
         System.out.println("Проверка восстановления состояния из файла");
