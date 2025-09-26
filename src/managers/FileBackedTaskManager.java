@@ -86,7 +86,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     private void save() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))) {
             writer.write("id,type,name,status,description,epic\n");
 
             for (Task task : getListTasks()) {
@@ -111,7 +111,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         String name = "Task";
         String epic = "";
         StringBuilder str = new StringBuilder();
-
 
         if (task instanceof Epic) {
             type = TypesOfTasks.EPIC;
