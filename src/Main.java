@@ -154,6 +154,9 @@ public class Main {
         fileBackedTaskManager.add(task1);
         fileBackedTaskManager.add(task2);
         fileBackedTaskManager.add(task3);
+        fileBackedTaskManager.deleteTaskById(task2.getId());
+        task2.setId(task1.getId());
+        fileBackedTaskManager.update(task2);
 
         Epic epic1 = new Epic(task1);
         Epic epic2 = new Epic(task2);
@@ -162,6 +165,7 @@ public class Main {
         fileBackedTaskManager.add(epic1);
         fileBackedTaskManager.add(epic2);
         fileBackedTaskManager.add(epic3);
+        fileBackedTaskManager.deleteEpicById(epic3.getId());
 
         Subtask subtask1 = new Subtask("Купить материалы", "Описание..", Status.NEW, epic1.getId());
         Subtask subtask2 = new Subtask("Нанять строителей", "Описание..", Status.NEW, epic1.getId());
@@ -170,13 +174,9 @@ public class Main {
 
         subtask1 = new Subtask("Subtask1", "Описание..", Status.NEW, epic2.getId());
         subtask2 = new Subtask("Subtask2", "Описание..", Status.NEW, epic2.getId());
-        Subtask subtask3 = new Subtask("Subtask3", "Описание..", Status.NEW, epic3.getId());
-        Subtask subtask4 = new Subtask("Subtask4", "Описание..", Status.NEW, epic3.getId());
         fileBackedTaskManager.add(subtask1);
         fileBackedTaskManager.add(subtask2);
-        fileBackedTaskManager.add(subtask3);
-        fileBackedTaskManager.add(subtask4);
-
+        fileBackedTaskManager.deleteSubtaskById(subtask1.getId());
 
         System.out.println();
         System.out.println("Проверка восстановления состояния из файла");
@@ -186,9 +186,6 @@ public class Main {
         System.out.println(fileBackedTaskManager.getListSubtasks());
         System.out.println();
         System.out.println(fileBackedTaskManager.getListEpics());
-
-        fileBackedTaskManager.save();
-
 
         FileBackedTaskManager newFileBackedTaskManager = fileBackedTaskManager.loadFromFile(
                 new File("manager_status.csv")
@@ -201,5 +198,6 @@ public class Main {
         System.out.println(newFileBackedTaskManager.getListSubtasks());
         System.out.println();
         System.out.println(newFileBackedTaskManager.getListEpics());
+
     }
 }

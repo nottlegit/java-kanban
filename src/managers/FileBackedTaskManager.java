@@ -9,7 +9,83 @@ import java.util.List;
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private static final String FILENAME = "manager_status.csv";
 
-    public void save() {
+    public FileBackedTaskManager() {
+        super();
+    }
+
+    @Override
+    public void deleteAllTasks() {
+        super.deleteAllTasks();
+        save();
+    }
+
+    @Override
+    public void add(Task task) {
+        super.add(task);
+        save();
+    }
+
+    @Override
+    public void update(Task task) {
+        super.update(task);
+        save();
+    }
+
+    @Override
+    public void deleteTaskById(int id) {
+        super.deleteTaskById(id);
+        save();
+    }
+
+    @Override
+    public void deleteAllEpics() {
+        super.deleteAllEpics();
+        save();
+    }
+
+    @Override
+    public void add(Epic epic) {
+        super.add(epic);
+        save();
+    }
+
+    @Override
+    public void update(Epic epic) {
+        super.update(epic);
+        save();
+    }
+
+    @Override
+    public void deleteEpicById(int idEpic) {
+        super.deleteEpicById(idEpic);
+        save();
+    }
+
+    @Override
+    public void deleteAllSubtasks() {
+        super.deleteAllSubtasks();
+        save();
+    }
+
+    @Override
+    public void add(Subtask subtask) {
+        super.add(subtask);
+        save();
+    }
+
+    @Override
+    public void update(Subtask subtask) {
+        super.update(subtask);
+        save();
+    }
+
+    @Override
+    public void deleteSubtaskById(int idSubtask) {
+        super.deleteSubtaskById(idSubtask);
+        save();
+    }
+
+    private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))){
             writer.write("id,type,name,status,description,epic\n");
 
