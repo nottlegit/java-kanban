@@ -8,6 +8,7 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private static final String FILENAME = "manager_status.csv";
+    private static final String HEADER = "id,type,name,status,description,epic\n";
 
     public FileBackedTaskManager() {
         super();
@@ -87,7 +88,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))) {
-            writer.write("id,type,name,status,description,epic\n");
+            writer.write(HEADER);
 
             for (Task task : getListTasks()) {
                 writer.write(toStringTask(task));
