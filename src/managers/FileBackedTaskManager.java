@@ -8,7 +8,7 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private static final String FILENAME = "manager_status.csv";
-    private static final String HEADER = "id,type,name,status,description,epic\n";
+    private static final String HEADER = "id,type,name,status,description,epic" + System.lineSeparator();
 
     public FileBackedTaskManager() {
         super();
@@ -132,7 +132,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             str.append(String.format("%s,", epic));
         }
 
-        return str.append("\n").toString();
+        return str.append(System.lineSeparator()).toString();
     }
 
     private String capitalizeFirstLetter(String input) {
