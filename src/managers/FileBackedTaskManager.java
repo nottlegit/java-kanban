@@ -109,16 +109,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String toStringTask(Task task) {
         TypesOfTasks type = TypesOfTasks.TASK;
-        String name = "Task";
         String epic = "";
         StringBuilder str = new StringBuilder();
 
         if (task instanceof Epic) {
             type = TypesOfTasks.EPIC;
-            name = "Epic";
         } else if (task instanceof Subtask) {
             type = TypesOfTasks.SUBTASK;
-            name = "Subtask";
             Subtask subtask = (Subtask) task;
             epic = String.format("%d", subtask.getIdEpic());
         }
@@ -126,7 +123,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         str.append(String.format("%d,%S,%s,%s,%s,",
                 task.getId(),
                 type,
-                name + task.getId(),
+                capitalizeFirstLetter(type.toString() + task.getId()),
                 task.getStatus(),
                 task.getDescription()
         ));
@@ -136,6 +133,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
 
         return str.append("\n").toString();
+    }
+
+    private String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
