@@ -6,7 +6,7 @@ import tasks.*;
 import java.io.*;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private static final String FILENAME = "manager_status.csv";
 
     public FileBackedTaskManager() {
