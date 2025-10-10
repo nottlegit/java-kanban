@@ -41,8 +41,7 @@ class FileBackedTaskManagerTest {
     void testSaveTasks() {
         Task task = new Task("Test Task", "Description", Status.NEW,
                 duration, localDateTime);
-        Epic epic = new Epic("Test Epic", "Epic Description", Status.NEW,
-                duration, localDateTime);
+        Epic epic = new Epic("Test Epic", "Epic Description", Status.NEW);
 
         manager.add(task);
         manager.add(epic);
@@ -71,9 +70,9 @@ class FileBackedTaskManagerTest {
     void testLoadFromFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");
-            writer.write("1,TASK,Task1,NEW,Task Description,\n");
-            writer.write("2,EPIC,Epic2,IN_PROGRESS,Epic Description,\n");
-            writer.write("3,SUBTASK,Subtask3,DONE,Subtask Description,2\n");
+            writer.write("1,TASK,Task1,NEW,Task Description,10,2025-10-10T15:17:48.698796800,\n");
+            writer.write("2,EPIC,Epic2,IN_PROGRESS,Epic Description,10,2025-10-10T15:17:48.698796800,\n");
+            writer.write("3,SUBTASK,Subtask3,DONE,Subtask Description,10,2025-10-10T15:17:48.698796800,2,\n");
         }
 
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(file);

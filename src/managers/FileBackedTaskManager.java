@@ -4,6 +4,8 @@ import managers.exceptions.ManagerSaveException;
 import tasks.*;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -120,13 +122,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             epic = String.format("%d", subtask.getIdEpic());
         }
 
-        str.append(String.format("%d,%S,%s,%s,%s,",
+        str.append(String.format("%d,%S,%s,%s,%s,%d,%s,",
                 task.getId(),
                 type,
                 capitalizeFirstLetter(type.toString() + task.getId()),
                 task.getStatus(),
-                task.getDescription()
+                task.getDescription(),
+                task.getDuration().toMinutes(),
+                task.getLocalDateTime().toString()
         ));
+
+        System.out.println(str);
 
         if (!epic.isEmpty()) {
             str.append(String.format("%s,", epic));
@@ -189,17 +195,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         TypesOfTasks type = TypesOfTasks.valueOf(list.get(1));
         String description = list.get(4);
         Status status = Status.valueOf(list.get(3));
+        Duration duration = Duration.ofMinutes(Integer.parseInt(list.get(5)));
+        LocalDateTime localDateTime = LocalDateTime.parse(list.get(6));
 
         switch (type) {
             case TASK:
-                fileBackedTaskManager.addFromFile(new Task(id, "", description, status));
+                fileBackedTaskManager.addFromFile(new Task(id, "", description, status, duration, localDateTime));
                 break;
             case EPIC:
                 fileBackedTaskManager.addFromFile(new Epic(id, "", description, status));
                 break;
             case SUBTASK:
-                int epicId = Integer.parseInt(list.get(5));
-                fileBackedTaskManager.addFromFile(new Subtask(id, "", description, status, epicId));
+                int epicId = Integer.parseInt(list.get(7));
+                fileBackedTaskManager.addFromFile(
+                        new Subtask(id, "", description, status, epicId, duration, localDateTime));
                 break;
             default:
                 throw new IllegalArgumentException("Неизвестный тип задачи: " + type);

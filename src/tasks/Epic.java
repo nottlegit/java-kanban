@@ -7,18 +7,18 @@ import java.util.ArrayList;
 public class Epic extends Task {
     private ArrayList<Integer> listSubtasks;
 
-    public Epic(String title, String description, Status status, Duration duration, LocalDateTime localDateTime) {
-        super(title, description, status, duration, localDateTime);
+    public Epic(String title, String description, Status status) {
+        super(title, description, status, Duration.ZERO, LocalDateTime.MIN);
         this.listSubtasks = new ArrayList<>();
     }
 
     public Epic(int id, String title, String description, Status status) {
-        super(id, title, description, status);
+        super(id, title, description, status, Duration.ZERO, LocalDateTime.MIN);
         this.listSubtasks = new ArrayList<>();
     }
 
     public Epic(Task task) {
-        this(task.title, task.description, task.status, task.duration, task.localDateTime);
+        this(task.title, task.description, task.status);
     }
 
     public ArrayList<Integer> getListSubtasks() {

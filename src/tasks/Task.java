@@ -20,7 +20,8 @@ public class Task {
         this.localDateTime = localDateTime;
     }
 
-    public Task(int id, String title, String description, Status status) {
+    public Task(
+            int id, String title, String description, Status status, Duration duration, LocalDateTime localDateTime) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -83,5 +84,21 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 }
