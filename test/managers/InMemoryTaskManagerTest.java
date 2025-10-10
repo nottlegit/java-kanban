@@ -8,26 +8,38 @@ import tasks.Subtask;
 import tasks.Task;
 import util.Managers;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    TaskManager manager;
-    Task task1;
-    Task task2;
-    Epic epic1;
-    Epic epic2;
-    Subtask subtask1;
-    Subtask subtask2;
+    private TaskManager manager;
+    private Task task1;
+    private Task task2;
+    private Epic epic1;
+    private Epic epic2;
+    private Subtask subtask1;
+    private Subtask subtask2;
+    private Duration duration;
+    private LocalDateTime localDateTime;
+
 
     @BeforeEach
     public void beforeEach() {
+        duration = Duration.ofMinutes(10);
+        localDateTime = LocalDateTime.now();
         manager = Managers.getDefault();
-        task1 = new Task("task1", "Описание..", Status.DONE);
-        task2 = new Task("task2", "Описание..", Status.NEW);
+        task1 = new Task("task1", "Описание..", Status.DONE,
+                duration, localDateTime);
+        task2 = new Task("task2", "Описание..", Status.NEW,
+                duration, localDateTime);
         epic1 = new Epic(task1);
         epic2 = new Epic(task2);
-        subtask1 = new Subtask("subtask1", "Описание..", Status.NEW, epic1.getId());
-        subtask2 = new Subtask("subtask2", "Описание..", Status.NEW, epic2.getId());
+        subtask1 = new Subtask("subtask1", "Описание..", Status.NEW, epic1.getId(),
+                duration, localDateTime);
+        subtask2 = new Subtask("subtask2", "Описание..", Status.NEW, epic2.getId(),
+                duration, localDateTime);
     }
 
     @Test
@@ -58,8 +70,10 @@ class InMemoryTaskManagerTest {
         manager.add(task2);
         manager.add(epic1);
         manager.add(epic2);
-        subtask1 = new Subtask("subtask1", "Описание..", Status.NEW, epic1.getId());
-        subtask2 = new Subtask("subtask2", "Описание..", Status.NEW, epic2.getId());
+        subtask1 = new Subtask("subtask1", "Описание..", Status.NEW, epic1.getId(),
+                duration, localDateTime);
+        subtask2 = new Subtask("subtask2", "Описание..", Status.NEW, epic2.getId(),
+                duration, localDateTime);
         manager.add(subtask1);
         manager.add(subtask2);
 

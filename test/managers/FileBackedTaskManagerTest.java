@@ -9,6 +9,8 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,11 +18,15 @@ class FileBackedTaskManagerTest {
 
     private FileBackedTaskManager manager;
     private File file;
+    private Duration duration;
+    private LocalDateTime localDateTime;
 
     @BeforeEach
     void setUp() throws IOException {
         file = new File("manager_status.csv");
         manager = new FileBackedTaskManager();
+        duration = Duration.ofMinutes(10);
+        localDateTime = LocalDateTime.now();
     }
 
     @AfterEach
@@ -33,12 +39,15 @@ class FileBackedTaskManagerTest {
     @org.junit.jupiter.api.Test
     @DisplayName("Добавление задачь в менеджер")
     void testSaveTasks() {
-        Task task = new Task("Test Task", "Description", Status.NEW);
-        Epic epic = new Epic("Test Epic", "Epic Description", Status.NEW);
+        Task task = new Task("Test Task", "Description", Status.NEW,
+                duration, localDateTime);
+        Epic epic = new Epic("Test Epic", "Epic Description", Status.NEW,
+                duration, localDateTime);
 
         manager.add(task);
         manager.add(epic);
-        Subtask subtask = new Subtask("Test Subtask", "Subtask Description", Status.NEW, epic.getId());
+        Subtask subtask = new Subtask("Test Subtask", "Subtask Description", Status.NEW, epic.getId(),
+                duration, localDateTime);
 
         manager.add(subtask);
 
