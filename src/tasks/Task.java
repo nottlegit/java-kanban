@@ -10,14 +10,14 @@ public class Task {
     protected String description;
     protected Status status;
     protected Duration duration;
-    protected LocalDateTime localDateTime;
+    protected LocalDateTime startTime;
 
-    public Task(String title, String description, Status status, Duration duration, LocalDateTime localDateTime) {
+    public Task(String title, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.duration = duration;
-        this.localDateTime = localDateTime;
+        this.startTime = startTime;
     }
 
     public Task(
@@ -61,7 +61,11 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        return localDateTime.plus(duration);
+        return startTime.plus(duration);
+    }
+
+    public LocalDateTime getStartTime() {
+        return this.startTime;
     }
 
     @Override
@@ -94,11 +98,11 @@ public class Task {
         this.duration = duration;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+    public LocalDateTime getFirstTime() {
+        return startTime;
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 }

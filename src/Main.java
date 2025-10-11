@@ -153,9 +153,11 @@ public class Main {
         manager.deleteEpicById(epic1.getId());
         System.out.println(manager.getHistory());
         System.out.println(manager.getHistory().size());
+        System.out.println(manager.getListEpics());
 
         // Спринт 7
-
+        System.out.println("//////////////////////////////////////////////////");
+        System.out.println("Спринт 7");
         System.out.println("Проверка работоспособности нового менеджера задачь");
 
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
@@ -220,5 +222,37 @@ public class Main {
         System.out.println();
         System.out.println(newFileBackedTaskManager.getListEpics());
 
+
+        System.out.println("////////////////////");
+        System.out.println("Спринт 8");
+
+        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+
+        Task task81 = new Task("task81", "description",
+                Status.NEW, Duration.ofMinutes(10), localDateTime);
+        Epic epic81 = new Epic("epic81", "description", Status.NEW);
+        Epic epic82 = new Epic("epic82", "description", Status.NEW);
+
+        inMemoryTaskManager.add(task81);
+        inMemoryTaskManager.add(epic81);
+        inMemoryTaskManager.add(epic82);
+
+        System.out.println(epic81);
+
+        System.out.println(inMemoryTaskManager.getListEpics());
+        System.out.println(inMemoryTaskManager.getListTasks());
+        System.out.println();
+
+        Subtask subtask81 = new Subtask("subtask81", "description",
+                Status.NEW, 1, Duration.ofMinutes(1440), localDateTime);
+        Subtask subtask82 = new Subtask("subtask82", "description",
+                Status.NEW, 1, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(2)));
+
+        inMemoryTaskManager.add(subtask81);
+        inMemoryTaskManager.add(subtask82);
+
+        System.out.println(333333333);
+
+        System.out.println(epic81);
     }
 }

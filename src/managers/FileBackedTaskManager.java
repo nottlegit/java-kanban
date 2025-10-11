@@ -129,7 +129,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.getStatus(),
                 task.getDescription(),
                 task.getDuration().toMinutes(),
-                task.getLocalDateTime().toString()
+                task.getFirstTime() == null ? null : task.getFirstTime().toString()
         ));
 
         System.out.println(str);
@@ -196,7 +196,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String description = list.get(4);
         Status status = Status.valueOf(list.get(3));
         Duration duration = Duration.ofMinutes(Integer.parseInt(list.get(5)));
-        LocalDateTime localDateTime = LocalDateTime.parse(list.get(6));
+        LocalDateTime localDateTime = list.get(6).equals("null") ? null : LocalDateTime.parse(list.get(6));
 
         switch (type) {
             case TASK:

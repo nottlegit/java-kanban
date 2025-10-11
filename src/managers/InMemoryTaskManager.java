@@ -6,9 +6,10 @@ import tasks.Subtask;
 import tasks.Task;
 import util.Managers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Task> tasks;
@@ -85,12 +86,14 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(nextId++);
         epics.put(epic.getId(), epic);
         changeStatusEpic(epic);
+        checkTheCompletionTimeEpic(epic);
     }
 
     @Override
     public void update(Epic epic) {
         epics.put(epic.getId(), epic);
         changeStatusEpic(epic);
+        checkTheCompletionTimeEpic(epic);
     }
 
     @Override
@@ -123,6 +126,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic epic : epics.values()) {
             epic.setListSubtasks(new ArrayList<>());
             changeStatusEpic(epic);
+            checkTheCompletionTimeEpic(epic);
         }
         clearHistory(subtasks);
         subtasks = new HashMap<>();
@@ -146,6 +150,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         addIdSubtaskToEpic(idEpic, idSubtask);
         changeStatusEpic(epic);
+        checkTheCompletionTimeEpic(epic);
     }
 
     @Override
@@ -154,21 +159,25 @@ public class InMemoryTaskManager implements TaskManager {
 
         subtasks.put(subtask.getId(), subtask);
         changeStatusEpic(epic);
+        checkTheCompletionTimeEpic(epic);
     }
 
     @Override
     public void deleteSubtaskById(int idSubtask) {
+        // были изменения спринт 8
         Subtask subtask = subtasks.get(idSubtask);
+        Epic epic = epics.get(subtask.getIdEpic());
 
         historyManager.remove(subtask);
 
-        ArrayList<Integer> listSubtasks = epics.get(subtask.getIdEpic()).getListSubtasks();
+        ArrayList<Integer> listSubtasks = epic.getListSubtasks();
         int indexToRemove = listSubtasks.indexOf(idSubtask);
 
         if (indexToRemove != -1) {
             listSubtasks.remove(indexToRemove);
         }
-        changeStatusEpic(epics.get(subtask.getIdEpic()));
+        changeStatusEpic(epic);
+        checkTheCompletionTimeEpic(epic);
         subtasks.remove(idSubtask);
     }
 
@@ -221,5 +230,45 @@ public class InMemoryTaskManager implements TaskManager {
         for (T task : map.values()) {
             historyManager.remove(task);
         }
+    }
+
+    private void checkTheCompletionTimeEpic(Epic epic) {
+        changeFirstTimeEpic(epic);
+        changeDurationEpic(epic);
+        changeEndTimeEpic(epic);
+    }
+
+    private void changeEndTimeEpic(Epic epic) {
+        Optional<LocalDateTime> maxEndTime = epic.getListSubtasks().stream()
+                .map(idSubtask -> subtasks.get(idSubtask))
+                .filter(Objects::nonNull)
+                .filter(subtask -> subtask.getStartTime() != null)
+                .map(Subtask::getEndTime)
+                .filter(Objects::nonNull)
+                .max(LocalDateTime::compareTo);
+
+        maxEndTime.ifPresent(epic::setEndTime);
+    }
+
+    private void changeDurationEpic(Epic epic) {
+        Duration sumDuration =  epic.getListSubtasks().stream()
+                .map(idSubtask -> subtasks.get(idSubtask))
+                .filter(Objects::nonNull)
+                .map(Subtask::getDuration)
+                .filter(Objects::nonNull)
+                .reduce(Duration.ZERO, Duration::plus);
+
+        epic.setDuration(sumDuration);
+    }
+
+    private void changeFirstTimeEpic(Epic epic) {
+        Optional<LocalDateTime> minEndTime = epic.getListSubtasks().stream()
+                .map(idSubtask -> subtasks.get(idSubtask))
+                .filter(Objects::nonNull)
+                .map(Subtask::getStartTime)
+                .filter(Objects::nonNull)
+                .min(LocalDateTime::compareTo);
+
+        minEndTime.ifPresent(epic::setStartTime);
     }
 }
