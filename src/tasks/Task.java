@@ -21,11 +21,13 @@ public class Task {
     }
 
     public Task(
-            int id, String title, String description, Status status, Duration duration, LocalDateTime localDateTime) {
+            int id, String title, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public int getId() {
