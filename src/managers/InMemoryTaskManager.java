@@ -341,7 +341,7 @@ public class InMemoryTaskManager implements TaskManager {
                 task2.getStartTime().isBefore(task1.getEndTime());
     }
 
-    public boolean isHasTimeOverlapWithAny(Task taskToCheck) {
+    private boolean isHasTimeOverlapWithAny(Task taskToCheck) {
         return getPrioritizedTasks().stream()
                 .filter(task -> !task.equals(taskToCheck))
                 .anyMatch(task -> isTheseTasksOverlapInTime(task, taskToCheck));
