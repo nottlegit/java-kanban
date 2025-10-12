@@ -230,10 +230,13 @@ public class Main {
 
         Task task81 = new Task("task81", "description",
                 Status.NEW, Duration.ofMinutes(10), localDateTime);
+        Task task82 = new Task("task82", "description",
+                Status.NEW, Duration.ofMinutes(10), localDateTime.plus(Duration.ofDays(1)));
         Epic epic81 = new Epic("epic81", "description", Status.NEW);
         Epic epic82 = new Epic("epic82", "description", Status.NEW);
 
         inMemoryTaskManager.add(task81);
+        inMemoryTaskManager.add(task82);
         inMemoryTaskManager.add(epic81);
         inMemoryTaskManager.add(epic82);
 
@@ -244,15 +247,16 @@ public class Main {
         System.out.println();
 
         Subtask subtask81 = new Subtask("subtask81", "description",
-                Status.NEW, 1, Duration.ofMinutes(1440), localDateTime);
+                Status.NEW, 2, Duration.ofMinutes(1440), localDateTime.plus(Duration.ofSeconds(1)));
         Subtask subtask82 = new Subtask("subtask82", "description",
-                Status.NEW, 1, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(2)));
+                Status.NEW, 2, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(2)));
 
         inMemoryTaskManager.add(subtask81);
         inMemoryTaskManager.add(subtask82);
 
-        System.out.println(333333333);
-
         System.out.println(epic81);
+        System.out.println();
+
+        System.out.println(inMemoryTaskManager.getPrioritizedTasks());
     }
 }
