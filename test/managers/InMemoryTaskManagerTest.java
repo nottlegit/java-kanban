@@ -31,15 +31,15 @@ class InMemoryTaskManagerTest {
         localDateTime = LocalDateTime.now();
         manager = Managers.getDefault();
         task1 = new Task("task1", "Описание..", Status.DONE,
-                duration, localDateTime);
+                duration, localDateTime.minus(Duration.ofDays(100)));
         task2 = new Task("task2", "Описание..", Status.NEW,
-                duration, localDateTime);
+                duration, localDateTime.minus(Duration.ofDays(90)));
         epic1 = new Epic(task1);
         epic2 = new Epic(task2);
         subtask1 = new Subtask("subtask1", "Описание..", Status.NEW, epic1.getId(),
-                duration, localDateTime);
+                duration, localDateTime.minus(Duration.ofDays(80)));
         subtask2 = new Subtask("subtask2", "Описание..", Status.NEW, epic2.getId(),
-                duration, localDateTime);
+                duration, localDateTime.minus(Duration.ofDays(70)));
     }
 
     @Test
@@ -71,9 +71,9 @@ class InMemoryTaskManagerTest {
         manager.add(epic1);
         manager.add(epic2);
         subtask1 = new Subtask("subtask1", "Описание..", Status.NEW, epic1.getId(),
-                duration, localDateTime);
+                duration, localDateTime.minus(Duration.ofDays(60)));
         subtask2 = new Subtask("subtask2", "Описание..", Status.NEW, epic2.getId(),
-                duration, localDateTime);
+                duration, localDateTime.minus(Duration.ofDays(50)));
         manager.add(subtask1);
         manager.add(subtask2);
 

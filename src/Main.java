@@ -10,6 +10,7 @@ import util.Managers;
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class Main {
@@ -20,11 +21,11 @@ public class Main {
         LocalDateTime localDateTime = LocalDateTime.now();
 
         Task task1 = new Task("Ремонт", "Описание..",
-                Status.DONE, Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Status.DONE, Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(100)));
         Task task2 = new Task("Уборка", "Описание..",
-                Status.NEW, Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Status.NEW, Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(95)));
         Task task3 = new Task("Переезд", "Описание..", Status.NEW,
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(90)));
 
         System.out.println("Добавляем первые 2 задачи");
         manager.add(task1);
@@ -57,9 +58,9 @@ public class Main {
 
         System.out.println("\nДобавляем subtask");
         Subtask subtask1 = new Subtask("Купить материалы", "Описание..", Status.NEW, epic1.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(85)));
         Subtask subtask2 = new Subtask("Нанять строителей", "Описание..", Status.NEW, epic1.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(80)));
         manager.add(subtask1);
         manager.add(subtask2);
         System.out.println(manager.getListSubtasks());
@@ -76,13 +77,13 @@ public class Main {
 
         System.out.println("\nДобавляем новые подзадачи в менеджер");
         subtask1 = new Subtask("Subtask1", "Описание..", Status.NEW, epic2.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(75)));
         subtask2 = new Subtask("Subtask2", "Описание..", Status.NEW, epic2.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(70)));
         Subtask subtask3 = new Subtask("Subtask3", "Описание..", Status.NEW, epic3.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(65)));
         Subtask subtask4 = new Subtask("Subtask4", "Описание..", Status.NEW, epic3.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(60)));
         manager.add(subtask1);
         manager.add(subtask2);
         manager.add(subtask3);
@@ -163,11 +164,11 @@ public class Main {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
 
         Task task71 = new Task("Ремонт", "Описание..", Status.DONE,
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(55)));
         Task task72 = new Task("Уборка", "Описание..", Status.NEW,
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(50)));
         Task task73 = new Task("Переезд", "Описание..", Status.NEW,
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(45)));
 
         System.out.println("Добавляем первые задачи");
         fileBackedTaskManager.add(task71);
@@ -187,16 +188,16 @@ public class Main {
         fileBackedTaskManager.deleteEpicById(epic73.getId());
 
         Subtask subtask71 = new Subtask("Купить материалы", "Описание..", Status.NEW, epic71.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(40)));
         Subtask subtask72 = new Subtask("Нанять строителей", "Описание..", Status.NEW, epic71.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(35)));
         fileBackedTaskManager.add(subtask71);
         fileBackedTaskManager.add(subtask72);
 
         subtask71 = new Subtask("Subtask71", "Описание..", Status.NEW, epic72.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(30)));
         subtask72 = new Subtask("Subtask72", "Описание..", Status.NEW, epic72.getId(),
-                Duration.ofMinutes(random.nextInt(100)), localDateTime);
+                Duration.ofMinutes(random.nextInt(100)), localDateTime.minus(Duration.ofDays(25)));
         fileBackedTaskManager.add(subtask71);
         fileBackedTaskManager.add(subtask72);
         fileBackedTaskManager.deleteSubtaskById(subtask71.getId());
@@ -229,9 +230,9 @@ public class Main {
         InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
 
         Task task81 = new Task("task81", "description",
-                Status.NEW, Duration.ofMinutes(10), localDateTime);
+                Status.NEW, Duration.ofMinutes(10), localDateTime.minus(Duration.ofDays(10)));
         Task task82 = new Task("task82", "description",
-                Status.NEW, Duration.ofMinutes(10), localDateTime.plus(Duration.ofDays(1)));
+                Status.NEW, Duration.ofMinutes(10), localDateTime.minus(Duration.ofDays(1)));
         Epic epic81 = new Epic("epic81", "description", Status.NEW);
         Epic epic82 = new Epic("epic82", "description", Status.NEW);
 
@@ -247,7 +248,7 @@ public class Main {
         System.out.println();
 
         Subtask subtask81 = new Subtask("subtask81", "description",
-                Status.NEW, 2, Duration.ofMinutes(1440), localDateTime.plus(Duration.ofSeconds(1)));
+                Status.NEW, 2, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(8)));
         Subtask subtask82 = new Subtask("subtask82", "description",
                 Status.NEW, 2, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(2)));
 
@@ -257,6 +258,11 @@ public class Main {
         System.out.println(epic81);
         System.out.println();
 
+        Task task83 = new Task("task83", "description",
+                Status.NEW,  Duration.ofMinutes(10), localDateTime.minus(Duration.ofDays(3)));
+
         System.out.println(inMemoryTaskManager.getPrioritizedTasks());
+
+        System.out.println(inMemoryTaskManager.isHasTimeOverlapWithAny(task83));
     }
 }

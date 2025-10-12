@@ -129,7 +129,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.getStatus(),
                 task.getDescription(),
                 task.getDuration().toMinutes(),
-                task.getFirstTime() == null ? null : task.getFirstTime().toString()
+                task.getStartTime() == null ? null : task.getStartTime().toString()
         ));
 
         System.out.println(str);

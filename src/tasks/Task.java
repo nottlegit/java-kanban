@@ -2,6 +2,8 @@ package tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Formatter;
 import java.util.Objects;
 
 public class Task {
@@ -82,16 +84,6 @@ public class Task {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "tasks.Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                '}';
-    }
-
     public Duration getDuration() {
         return duration;
     }
@@ -100,11 +92,20 @@ public class Task {
         this.duration = duration;
     }
 
-    public LocalDateTime getFirstTime() {
-        return startTime;
-    }
-
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yy HH:mm");
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime.format(formatter) +
+                '}';
     }
 }

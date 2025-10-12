@@ -40,13 +40,13 @@ class FileBackedTaskManagerTest {
     @DisplayName("Добавление задачь в менеджер")
     void testSaveTasks() {
         Task task = new Task("Test Task", "Description", Status.NEW,
-                duration, localDateTime);
+                duration, localDateTime.minus(Duration.ofDays(100)));
         Epic epic = new Epic("Test Epic", "Epic Description", Status.NEW);
 
         manager.add(task);
         manager.add(epic);
         Subtask subtask = new Subtask("Test Subtask", "Subtask Description", Status.NEW, epic.getId(),
-                duration, localDateTime);
+                duration, localDateTime.minus(Duration.ofDays(95)));
 
         manager.add(subtask);
 

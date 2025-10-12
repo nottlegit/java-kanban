@@ -1,5 +1,6 @@
 package managers;
 
+import org.w3c.dom.ls.LSOutput;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -25,7 +26,7 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager = Managers.getDefaultHistoryManager();
         nextId = 0;
         prioritizedTasks = new TreeSet<>(Comparator.comparing(
-                Task::getFirstTime,
+                Task::getStartTime,
                 Comparator.nullsLast(Comparator.naturalOrder())
         ));
     }
@@ -51,6 +52,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void add(Task task) {
+        if (isHasTimeOverlapWithAny(task)) {
+            return;
+        }
         task.setId(nextId++);
         tasks.put(task.getId(), task);
         addPrioritizedTasks(task);
@@ -58,6 +62,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void update(Task task) {
+        if (isHasTimeOverlapWithAny(task)) {
+            return;
+        }
         tasks.put(task.getId(), task);
         updateInPrioritizedTasks(task);
     }
@@ -76,7 +83,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() {
-        deleteAllEpicsInPrioritizedTasks();
         clearHistory(epics);
         clearHistory(subtasks);
         subtasks = new HashMap<>();
@@ -96,7 +102,6 @@ public class InMemoryTaskManager implements TaskManager {
         epics.put(epic.getId(), epic);
         changeStatusEpic(epic);
         checkTheCompletionTimeEpic(epic);
-        addPrioritizedTasks(epic);
     }
 
     @Override
@@ -104,7 +109,6 @@ public class InMemoryTaskManager implements TaskManager {
         epics.put(epic.getId(), epic);
         changeStatusEpic(epic);
         checkTheCompletionTimeEpic(epic);
-        updateInPrioritizedTasks(epic);
     }
 
     @Override
@@ -115,7 +119,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         historyManager.remove(epics.get(idEpic));
         epics.remove(idEpic);
-        deleteByIdInPrioritizedTasks(idEpic);
     }
 
     @Override
@@ -154,6 +157,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void add(Subtask subtask) {
+        if (isHasTimeOverlapWithAny(subtask)) {
+            return;
+        }
         Epic epic = epics.get(subtask.getIdEpic());
         int idEpic = epic.getId();
         int idSubtask = nextId++;
@@ -169,6 +175,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void update(Subtask subtask) {
+        if (isHasTimeOverlapWithAny(subtask)) {
+            return;
+        }
         Epic epic = epics.get(subtask.getIdEpic());
 
         subtasks.put(subtask.getId(), subtask);
@@ -300,13 +309,7 @@ public class InMemoryTaskManager implements TaskManager {
         getListSubtasks().forEach(task -> prioritizedTasks.remove(task));
     }
 
-    private void deleteAllEpicsInPrioritizedTasks() {
-        getListEpics().forEach(epic -> prioritizedTasks.remove(epic));
-        deleteAllSubtasksInPrioritizedTasks();
-    }
-
     private void addPrioritizedTasks(Task task) {
-        //System.out.println(task);
         prioritizedTasks.add(task);
     }
 
@@ -317,5 +320,30 @@ public class InMemoryTaskManager implements TaskManager {
 
     private void deleteByIdInPrioritizedTasks(int id) {
         prioritizedTasks.removeIf(t -> t.getId() == id);
+    }
+
+    private boolean isTheseTasksOverlapInTime(Task task1, Task task2) {
+        if (task1.getEndTime() == null || task2.getEndTime() == null) {
+            return false;
+        }
+        /*
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yy HH:mm");
+        System.out.println(1111111111);
+        System.out.println("проверка " + task1.getTitle() + " " + task2.getTitle());
+        System.out.printf("дата старта 1 %s, дата конца 1 %s \n дата старта 2 %s, дата конца 2 %s\n",
+                task1.getStartTime().format(formatter), task1.getEndTime().format(formatter),
+                task2.getStartTime().format(formatter), task2.getEndTime().format(formatter));
+        System.out.printf("результат сравнения %s\n", task1.getStartTime().isBefore(task2.getEndTime()) &&
+                task2.getStartTime().isBefore(task1.getEndTime()));
+        System.out.println(1111111111); */
+
+        return task1.getStartTime().isBefore(task2.getEndTime()) &&
+                task2.getStartTime().isBefore(task1.getEndTime());
+    }
+
+    public boolean isHasTimeOverlapWithAny(Task taskToCheck) {
+        return getPrioritizedTasks().stream()
+                .filter(task -> !task.equals(taskToCheck))
+                .anyMatch(task -> isTheseTasksOverlapInTime(task, taskToCheck));
     }
 }
