@@ -29,7 +29,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     @DisplayName("Добавление и получение задачи")
-    void addAndGetTaskTest() {
+    void TestAddAndGetTask() {
         List<Task> tasks = manager.getListTasks();
         List<Epic> epics = manager.getListEpics();
         List<Subtask> subtasks = manager.getListSubtasks();
@@ -38,53 +38,53 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertTrue(epics.isEmpty(), "epics должен быть пустым");
         assertTrue(subtasks.isEmpty(), "subtasks должен быть пустым");
 
-        Task task1 = new Task("task1", "description1",
+        Task task = new Task("task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
+        Epic epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(task1);
-        manager.add(epic1);
+        manager.add(task);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.NEW, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
 
-        Task getedTask = manager.getTaskById(task1.getId());
-        Epic getedEpic = manager.getEpicById(epic1.getId());
-        Subtask getedSubtask = manager.getSubtaskById(subtask1.getId());
+        Task getedTask = manager.getTaskById(task.getId());
+        Epic getedEpic = manager.getEpicById(epic.getId());
+        Subtask getedSubtask = manager.getSubtaskById(subtask.getId());
 
-        assertEquals(task1, getedTask, "Tasks не совпадают");
-        assertEquals(epic1, getedEpic, "Epics не совпадают");
-        assertEquals(subtask1, getedSubtask, "Subtasks не совпадают");
+        assertEquals(task, getedTask, "Tasks не совпадают");
+        assertEquals(epic, getedEpic, "Epics не совпадают");
+        assertEquals(subtask, getedSubtask, "Subtasks не совпадают");
     }
 
     @Test
     @DisplayName("Обновление задач")
-    void updateTaskTest() {
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
-        Task task1 = new Task("task1", "description1",
+    void TestUpdateTask() {
+        Epic epic = new Epic("epic", "description", Status.NEW);
+        Task task = new Task("task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
 
-        manager.add(task1);
-        manager.add(epic1);
+        manager.add(task);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.NEW, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
 
-        task1.setDescription("Update description");
-        epic1.setDescription("Update description");
-        subtask1.setDescription("Update description");
+        task.setDescription("Update description");
+        epic.setDescription("Update description");
+        subtask.setDescription("Update description");
 
-        manager.update(task1);
-        manager.update(epic1);
-        manager.update(subtask1);
+        manager.update(task);
+        manager.update(epic);
+        manager.update(subtask);
 
-        Task updatedTask = manager.getTaskById(task1.getId());
-        Epic updatedEpic = manager.getEpicById(epic1.getId());
-        Subtask updatedSubtask = manager.getSubtaskById(subtask1.getId());
+        Task updatedTask = manager.getTaskById(task.getId());
+        Epic updatedEpic = manager.getEpicById(epic.getId());
+        Subtask updatedSubtask = manager.getSubtaskById(subtask.getId());
 
         assertEquals("Update description", updatedTask.getDescription());
         assertEquals("Update description", updatedEpic.getDescription());
@@ -93,18 +93,18 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     @DisplayName("Удаление всех задач")
-    void deleteAllTaskTest() {
-        Task task1 = new Task("task1", "description1",
+    void TestDeleteAllTask() {
+        Task task = new Task("task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
+        Epic epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(task1);
-        manager.add(epic1);
+        manager.add(task);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.NEW, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
 
         assertFalse(manager.getListTasks().isEmpty(), "tasks не должен быть пустым");
         assertFalse(manager.getListEpics().isEmpty(), "epics не должен быть пустым");
@@ -117,14 +117,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertTrue(manager.getListEpics().isEmpty(), "epics должен быть пустым");
         assertTrue(manager.getListSubtasks().isEmpty(), "subtasks должен быть пустым");
 
-        epic1 = new Epic("epic1", "description1", Status.NEW);
+        epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(epic1);
+        manager.add(epic);
 
-        subtask1 = new Subtask("subtask1", "description1",
-                Status.NEW, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        subtask = new Subtask("subtask", "description",
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
         manager.deleteAllSubtasks();
         manager.deleteAllEpics();
         assertTrue(manager.getListSubtasks().isEmpty(), "subtasks должен быть пустым");
@@ -132,31 +132,31 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     @DisplayName("Удаление задач по id")
-    void deleteTaskByIdTest() {
-        Task task1 = new Task("task1", "description1",
+    void TestDeleteTaskById() {
+        Task task = new Task("task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
+        Epic epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(task1);
-        manager.add(epic1);
+        manager.add(task);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.NEW, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
 
-        manager.deleteTaskById(task1.getId());
-        manager.deleteEpicById(epic1.getId());
+        manager.deleteTaskById(task.getId());
+        manager.deleteEpicById(epic.getId());
 
         assertTrue(manager.getListTasks().isEmpty(), "tasks должен быть пустым");
         assertTrue(manager.getListEpics().isEmpty(), "epics должен быть пустым");
         assertTrue(manager.getListSubtasks().isEmpty(), "subtasks должен быть пустым");
 
-        Epic epic2 = new Epic("epic1", "description1", Status.NEW);
+        Epic epic2 = new Epic("epic", "description", Status.NEW);
 
         manager.add(epic2);
 
-        Subtask subtask2 = new Subtask("subtask1", "description1",
+        Subtask subtask2 = new Subtask("subtask", "description",
                 Status.NEW, epic2.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
 
         manager.add(subtask2);
@@ -168,104 +168,104 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     @DisplayName("Проверка статуса Epic(все subtask Status.NEW)")
-    void epicStatusAllNew(){
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
+    void TestEpicStatusAllNew(){
+        Epic epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(epic1);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.NEW, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
         Subtask subtask2 = new Subtask("subtask2", "description2",
-                Status.NEW, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
         manager.add(subtask2);
 
-        assertEquals(Status.NEW, epic1.getStatus(), "Статус Эпика должен быть NEW");
+        assertEquals(Status.NEW, epic.getStatus(), "Статус Эпика должен быть NEW");
     }
 
     @Test
     @DisplayName("Проверка статуса Epic(все subtask Status.Done)")
-    void epicStatusAllDone() {
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
+    void TestEpicStatusAllDone() {
+        Epic epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(epic1);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.DONE, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.DONE, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
         Subtask subtask2 = new Subtask("subtask2", "description2",
-                Status.DONE, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+                Status.DONE, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
         manager.add(subtask2);
 
-        assertEquals(Status.DONE, epic1.getStatus(), "Статус Эпика должен быть DONE");
+        assertEquals(Status.DONE, epic.getStatus(), "Статус Эпика должен быть DONE");
     }
 
     @Test
     @DisplayName("Проверка статуса Epic(subtask Status.DONE, Status.NEW)")
-    void epicStatusDoneAndNew() {
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
+    void TestEpicStatusDoneAndNew() {
+        Epic epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(epic1);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.DONE, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.DONE, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
         Subtask subtask2 = new Subtask("subtask2", "description2",
-                Status.NEW, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
         manager.add(subtask2);
 
-        assertEquals(Status.IN_PROGRESS, epic1.getStatus(), "Статус Эпика должен быть IN_PROGRESS");
+        assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Статус Эпика должен быть IN_PROGRESS");
     }
 
     @Test
     @DisplayName("Проверка статуса Epic(все subtask Status.IN_PROGRESS)")
-    void epicStatusAllInProgress() {
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
+    void TestEpicStatusAllInProgress() {
+        Epic epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(epic1);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.IN_PROGRESS, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.IN_PROGRESS, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
         Subtask subtask2 = new Subtask("subtask2", "description2",
-                Status.IN_PROGRESS, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+                Status.IN_PROGRESS, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
         manager.add(subtask2);
 
-        assertEquals(Status.IN_PROGRESS, epic1.getStatus(), "Статус Эпика должен быть IN_PROGRESS");
+        assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Статус Эпика должен быть IN_PROGRESS");
     }
 
     @Test
     @DisplayName("Получение subtasks из epic")
-    void getSubtasksInEpicTest() {
-        Epic epic1 = new Epic("epic1", "description1", Status.NEW);
+    void TestGetSubtasksInEpic() {
+        Epic epic = new Epic("epic", "description", Status.NEW);
 
-        manager.add(epic1);
+        manager.add(epic);
 
-        Subtask subtask1 = new Subtask("subtask1", "description1",
-                Status.IN_PROGRESS, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+        Subtask subtask = new Subtask("subtask", "description",
+                Status.IN_PROGRESS, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
         Subtask subtask2 = new Subtask("subtask2", "description2",
-                Status.IN_PROGRESS, epic1.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+                Status.IN_PROGRESS, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
 
-        manager.add(subtask1);
+        manager.add(subtask);
         manager.add(subtask2);
 
-        List<Subtask> epicSubtasks = manager.getListEpicSubtasksById(epic1.getId());
+        List<Subtask> epicSubtasks = manager.getListEpicSubtasksById(epic.getId());
         assertEquals(2, epicSubtasks.size(), "Должны быть возвращены все подзадачи эпика");
     }
 
     @Test
     @DisplayName("Добавление задач с пересечениями")
-    void timeOverlapDetectionTest() {
-        Task task1 = new Task("task1", "description1",
+    void TestTimeOverlapDetection() {
+        Task task = new Task("task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
-        Task task2 = new Task( "task1", "description1",
+        Task task2 = new Task( "task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
 
-        manager.add(task1);
+        manager.add(task);
         manager.add(task2);
 
         List<Task> tasks = manager.getListTasks();
@@ -276,12 +276,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     @DisplayName("Добавление задачи без пересечений")
     void noTimeOverlapTest() {
-        Task task1 = new Task("task1", "description1",
+        Task task = new Task("task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
-        Task task2 = new Task( "task1", "description1",
+        Task task2 = new Task( "task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
 
-        manager.add(task1);
+        manager.add(task);
         manager.add(task2);
 
         List<Task> tasks = manager.getListTasks();
@@ -292,12 +292,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     @DisplayName("Добавление задачи без времени")
     void testTasksWithoutTime() {
-        Task task1 = new Task("task1", "description1",
+        Task task = new Task("task", "description",
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
-        Task task2 = new Task( "task1", "description1",
+        Task task2 = new Task( "task", "description",
                 Status.NEW, null, null);
 
-        manager.add(task1);
+        manager.add(task);
         manager.add(task2);
 
         List<Task> tasks = manager.getListTasks();

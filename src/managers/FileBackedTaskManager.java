@@ -10,7 +10,8 @@ import java.util.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private static final String FILENAME = "manager_status.csv";
-    private static final String HEADER = "id,type,name,status,description,epic" + System.lineSeparator();
+    private static final String HEADER = "id,type,name,status,description,duration, startTime, epic"
+            + System.lineSeparator();
 
     public FileBackedTaskManager() {
         super();

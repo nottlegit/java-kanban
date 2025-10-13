@@ -11,23 +11,18 @@ import tasks.Task;
 
 import java.io.*;
 import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 
     private FileBackedTaskManager manager;
     private File file;
-    private Duration duration;
-    private LocalDateTime localDateTime;
 
     @BeforeEach
     void setUp() throws IOException {
         file = new File("manager_status.csv");
         manager = new FileBackedTaskManager();
-        duration = Duration.ofMinutes(10);
-        localDateTime = LocalDateTime.now();
     }
 
     @AfterEach
@@ -37,17 +32,22 @@ class FileBackedTaskManagerTest {
         }
     }
 
+    @Override
+    protected FileBackedTaskManager createTaskManager() {
+        return new FileBackedTaskManager();
+    }
+
     @Test
-    @DisplayName("Добавление задачь в менеджер")
+    @DisplayName("Добавление задач в менеджер")
     void testSaveTasks() {
-        Task task = new Task("Test Task", "Description", Status.NEW,
-                duration, localDateTime.minus(Duration.ofDays(100)));
+        Task task = new Task("task", "description",
+                Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
         Epic epic = new Epic("Test Epic", "Epic Description", Status.NEW);
 
         manager.add(task);
         manager.add(epic);
-        Subtask subtask = new Subtask("Test Subtask", "Subtask Description", Status.NEW, epic.getId(),
-                duration, localDateTime.minus(Duration.ofDays(95)));
+        Subtask subtask =new Subtask("subtask", "description",
+                Status.NEW, epic.getId(), Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
 
         manager.add(subtask);
 
@@ -56,7 +56,7 @@ class FileBackedTaskManagerTest {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String header = reader.readLine();
-            assertEquals("id,type,name,status,description,epic", header);
+            assertEquals("id,type,name,status,description,duration, startTime, epic", header);
 
             // Проверяем количество строк (заголовок + 3 задачи)
             byte lineCount = (byte) reader.lines().count();
@@ -66,14 +66,14 @@ class FileBackedTaskManagerTest {
         }
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Проверка состояния менеджера при загрузки из файла")
     void testLoadFromFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");
-            writer.write("1,TASK,Task1,NEW,Task Description,10,2025-10-10T15:17:48.698796800,\n");
-            writer.write("2,EPIC,Epic2,IN_PROGRESS,Epic Description,10,2025-10-10T15:17:48.698796800,\n");
-            writer.write("3,SUBTASK,Subtask3,DONE,Subtask Description,10,2025-10-10T15:17:48.698796800,2,\n");
+            writer.write("1,TASK,Task1,NEW,Описание..,50,2025-08-24T18:10:10.676932200,\n");
+            writer.write("2,EPIC,Epic2,NEW,Описание..,65,2025-08-29T18:10:10.676932200,\n");
+            writer.write("3,SUBTASK,Subtask3,NEW,Описание..,17,2025-09-03T18:10:10.676932200,2\n");
         }
 
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(file);
@@ -83,7 +83,7 @@ class FileBackedTaskManagerTest {
         assertNotNull(loadedManager.getEpicById(2));
         assertNotNull(loadedManager.getSubtaskById(3));
 
-        assertEquals("Task Description", loadedManager.getTaskById(1).getDescription());
+        assertEquals("Описание..", loadedManager.getTaskById(1).getDescription());
         assertEquals(Status.NEW, loadedManager.getTaskById(1).getStatus());
 
         // Проверяем связь подзадачи с эпиком
