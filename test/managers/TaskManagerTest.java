@@ -27,8 +27,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         localDateTime = LocalDateTime.now();
     }
 
-
-
     @Test
     @DisplayName("Добавление и получение задачи")
     void addAndGetTaskTest() {
