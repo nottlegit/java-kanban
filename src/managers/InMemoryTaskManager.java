@@ -1,5 +1,6 @@
 package managers;
 
+import org.w3c.dom.ls.LSOutput;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -83,6 +84,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() {
+        deleteAllSubtasksInPrioritizedTasks();
         clearHistory(epics);
         clearHistory(subtasks);
         subtasks = new HashMap<>();
@@ -117,6 +119,7 @@ public class InMemoryTaskManager implements TaskManager {
                         .forEach(idSubtask -> {
                             subtasks.remove(idSubtask);
                             historyManager.remove(subtasks.get(idSubtask));
+                            deleteByIdInPrioritizedTasks(idSubtask);
                         });
         historyManager.remove(epics.get(idEpic));
         epics.remove(idEpic);
@@ -188,7 +191,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteSubtaskById(int idSubtask) {
-        // были изменения спринт 8
         Subtask subtask = subtasks.get(idSubtask);
         Epic epic = epics.get(subtask.getIdEpic());
 
@@ -211,7 +213,8 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    public ArrayList<Task> getPrioritizedTasks() {
+    @Override
+    public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
     }
 
@@ -326,16 +329,6 @@ public class InMemoryTaskManager implements TaskManager {
         if (task1.getEndTime() == null || task2.getEndTime() == null) {
             return false;
         }
-        /*
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yy HH:mm");
-        System.out.println(1111111111);
-        System.out.println("проверка " + task1.getTitle() + " " + task2.getTitle());
-        System.out.printf("дата старта 1 %s, дата конца 1 %s \n дата старта 2 %s, дата конца 2 %s\n",
-                task1.getStartTime().format(formatter), task1.getEndTime().format(formatter),
-                task2.getStartTime().format(formatter), task2.getEndTime().format(formatter));
-        System.out.printf("результат сравнения %s\n", task1.getStartTime().isBefore(task2.getEndTime()) &&
-                task2.getStartTime().isBefore(task1.getEndTime()));
-        System.out.println(1111111111); */
 
         return task1.getStartTime().isBefore(task2.getEndTime()) &&
                 task2.getStartTime().isBefore(task1.getEndTime());

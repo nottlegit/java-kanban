@@ -3,6 +3,7 @@ package managers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -36,7 +37,7 @@ class FileBackedTaskManagerTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     @DisplayName("Добавление задачь в менеджер")
     void testSaveTasks() {
         Task task = new Task("Test Task", "Description", Status.NEW,
@@ -65,7 +66,7 @@ class FileBackedTaskManagerTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     @DisplayName("Проверка состояния менеджера при загрузки из файла")
     void testLoadFromFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {

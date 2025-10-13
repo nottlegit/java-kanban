@@ -155,11 +155,10 @@ public class Main {
         System.out.println(manager.getHistory());
         System.out.println(manager.getHistory().size());
         System.out.println(manager.getListEpics());
-
         // Спринт 7
-        System.out.println("//////////////////////////////////////////////////");
+        System.out.println("--------------------------------------------------");
         System.out.println("Спринт 7");
-        System.out.println("Проверка работоспособности нового менеджера задачь");
+        System.out.println("Проверка работоспособности нового менеджера задач");
 
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
 
@@ -224,7 +223,7 @@ public class Main {
         System.out.println(newFileBackedTaskManager.getListEpics());
 
 
-        System.out.println("////////////////////");
+        System.out.println("---------------------------------------------");
         System.out.println("Спринт 8");
 
         InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
@@ -241,10 +240,8 @@ public class Main {
         inMemoryTaskManager.add(epic81);
         inMemoryTaskManager.add(epic82);
 
-        System.out.println(epic81);
-
+        System.out.println("проверяем состояние эпика (времени выполнения нет)");
         System.out.println(inMemoryTaskManager.getListEpics());
-        System.out.println(inMemoryTaskManager.getListTasks());
         System.out.println();
 
         Subtask subtask81 = new Subtask("subtask81", "description",
@@ -255,14 +252,18 @@ public class Main {
         inMemoryTaskManager.add(subtask81);
         inMemoryTaskManager.add(subtask82);
 
-        System.out.println(epic81);
+        System.out.println("проверяем состояние эпика (должно появиться startTime && endTime");
+        System.out.println(inMemoryTaskManager.getListEpics());
         System.out.println();
 
         Task task83 = new Task("task83", "description",
-                Status.NEW,  Duration.ofMinutes(10), localDateTime.minus(Duration.ofDays(3)));
+                Status.NEW,Duration.ofMinutes(10), localDateTime.minus(Duration.ofDays(1)));
 
+        inMemoryTaskManager.add(task83);
+
+        System.out.println("Задачи должны быть в правильном порядке");
+        System.out.println("И task83 не добавилась");
         System.out.println(inMemoryTaskManager.getPrioritizedTasks());
-
-        //System.out.println(inMemoryTaskManager.isHasTimeOverlapWithAny(task83));
+        System.out.println(inMemoryTaskManager.getListTasks());
     }
 }

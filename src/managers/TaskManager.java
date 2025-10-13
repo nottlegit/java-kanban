@@ -48,4 +48,6 @@ public interface TaskManager {
     void deleteSubtaskById(int idSubtask);
 
     <T extends Task> List<T> getHistory();
+
+    List<Task> getPrioritizedTasks();
 }
