@@ -25,7 +25,7 @@ public class InMemoryTaskManager implements TaskManager {
         epics = new HashMap<>();
         subtasks = new HashMap<>();
         historyManager = Managers.getDefaultHistoryManager();
-        nextId = 0;
+        nextId = 1;
         prioritizedTasks = new TreeSet<>(Comparator.comparing(
                 Task::getStartTime,
                 Comparator.nullsLast(Comparator.naturalOrder())

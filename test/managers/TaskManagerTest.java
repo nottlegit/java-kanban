@@ -239,7 +239,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void testGetEpicSubtasks() {
+    @DisplayName("Получение subtasks из epic")
+    void getSubtasksInEpicTest() {
         Epic epic1 = new Epic("epic1", "description1", Status.NEW);
 
         manager.add(epic1);
@@ -253,7 +254,54 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.add(subtask2);
 
         List<Subtask> epicSubtasks = manager.getListEpicSubtasksById(epic1.getId());
-        assertEquals(2, epicSubtasks.size(),
-                "Должны быть возвращены все подзадачи эпика");
+        assertEquals(2, epicSubtasks.size(), "Должны быть возвращены все подзадачи эпика");
+    }
+
+    @Test
+    @DisplayName("Добавление задач с пересечениями")
+    void timeOverlapDetectionTest() {
+        Task task1 = new Task("task1", "description1",
+                Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+        Task task2 = new Task( "task1", "description1",
+                Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+
+        manager.add(task1);
+        manager.add(task2);
+
+        List<Task> tasks = manager.getListTasks();
+        assertEquals(1, tasks.size(),
+                "Не должна добавляться задача с пересекающимся временем");
+    }
+
+    @Test
+    @DisplayName("Добавление задачи без пересечений")
+    void noTimeOverlapTest() {
+        Task task1 = new Task("task1", "description1",
+                Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+        Task task2 = new Task( "task1", "description1",
+                Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(2)));
+
+        manager.add(task1);
+        manager.add(task2);
+
+        List<Task> tasks = manager.getListTasks();
+        assertEquals(2, tasks.size(),
+                "Обе задачи должны добавиться (нет пересечения)");
+    }
+
+    @Test
+    @DisplayName("Добавление задачи без времени")
+    void testTasksWithoutTime() {
+        Task task1 = new Task("task1", "description1",
+                Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
+        Task task2 = new Task( "task1", "description1",
+                Status.NEW, null, null);
+
+        manager.add(task1);
+        manager.add(task2);
+
+        List<Task> tasks = manager.getListTasks();
+        assertEquals(2, tasks.size(),
+                "Задачи без времени должны добавляться без проверки пересечений");
     }
 }

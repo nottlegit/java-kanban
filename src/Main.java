@@ -245,9 +245,9 @@ public class Main {
         System.out.println();
 
         Subtask subtask81 = new Subtask("subtask81", "description",
-                Status.NEW, 2, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(8)));
+                Status.NEW, 3, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(8)));
         Subtask subtask82 = new Subtask("subtask82", "description",
-                Status.NEW, 2, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(2)));
+                Status.NEW, 3, Duration.ofMinutes(1440), localDateTime.minus(Duration.ofDays(2)));
 
         inMemoryTaskManager.add(subtask81);
         inMemoryTaskManager.add(subtask82);

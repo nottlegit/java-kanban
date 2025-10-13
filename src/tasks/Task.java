@@ -18,7 +18,7 @@ public class Task {
         this.title = title;
         this.description = description;
         this.status = status;
-        this.duration = duration;
+        this.duration = duration == null ? Duration.ZERO : duration;
         this.startTime = startTime;
     }
 
@@ -28,7 +28,7 @@ public class Task {
         this.title = title;
         this.description = description;
         this.status = status;
-        this.duration = duration;
+        this.duration = duration == null ? Duration.ZERO : duration;
         this.startTime = startTime;
     }
 
@@ -65,6 +65,9 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
+        if (startTime == null || duration == null) {
+            return null;
+        }
         return startTime.plus(duration);
     }
 
