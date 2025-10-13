@@ -48,7 +48,7 @@ class InMemoryHistoryManagerTest {
 
         List<Task> history = historyManager.getHistory();
         assertEquals(1, history.size());
-        assertEquals(task1, history.get(0));
+        assertEquals(task1, history.getFirst());
     }
 
     @Test
@@ -73,7 +73,7 @@ class InMemoryHistoryManagerTest {
 
         List<Task> history = historyManager.getHistory();
         assertEquals(1, history.size());
-        assertEquals(task1, history.get(0));
+        assertEquals(task1, history.getFirst());
     }
 
     @Test
@@ -135,7 +135,7 @@ class InMemoryHistoryManagerTest {
 
         List<Task> history = historyManager.getHistory();
         assertEquals(1, history.size());
-        assertEquals(task1, history.get(0));
+        assertEquals(task1, history.getFirst());
     }
 
     // ========== ТЕСТЫ ДЛЯ МЕТОДА REMOVE ==========
