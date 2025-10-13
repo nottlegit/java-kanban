@@ -1,6 +1,5 @@
 package managers;
 
-import org.w3c.dom.ls.LSOutput;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -10,6 +9,7 @@ import util.Managers;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     protected TreeSet<Task> prioritizedTasks;
@@ -113,22 +113,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpicById(int idEpic) {
-        for (int idSubtask : epics.get(idEpic).getListSubtasks()) {
-            subtasks.remove(idSubtask);
-            historyManager.remove(subtasks.get(idSubtask));
-        }
+        epics.get(idEpic).getListSubtasks()
+                        .forEach(idSubtask -> {
+                            subtasks.remove(idSubtask);
+                            historyManager.remove(subtasks.get(idSubtask));
+                        });
         historyManager.remove(epics.get(idEpic));
         epics.remove(idEpic);
     }
 
     @Override
-    public ArrayList<Subtask> getListEpicSubtasksById(int idEpic) {
-        ArrayList<Subtask> listSubtasks = new ArrayList<>();
-
-        for (int idSubtasks : epics.get(idEpic).getListSubtasks()) {
-            listSubtasks.add(subtasks.get(idSubtasks));
-        }
-        return listSubtasks;
+    public List<Subtask> getListEpicSubtasksById(int idEpic) {
+        return epics.get(idEpic).getListSubtasks().stream()
+                .filter(idSubtask -> subtasks.containsKey(idSubtask))
+                .map(idSubtask -> subtasks.get(idSubtask))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -138,11 +137,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllSubtasks() {
-        for (Epic epic : epics.values()) {
+        getListEpics().forEach(epic -> {
             epic.setListSubtasks(new ArrayList<>());
             changeStatusEpic(epic);
             checkTheCompletionTimeEpic(epic);
-        }
+        });
+
         clearHistory(subtasks);
         subtasks = new HashMap<>();
         deleteAllSubtasksInPrioritizedTasks();
