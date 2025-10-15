@@ -133,8 +133,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.getStartTime() == null ? null : task.getStartTime().toString()
         ));
 
-        System.out.println(str);
-
         if (!epic.isEmpty()) {
             str.append(String.format("%s,", epic));
         }
