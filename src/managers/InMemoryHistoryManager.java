@@ -27,7 +27,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    private Map<Integer, Node<Task>> mapHistory;
+    private final Map<Integer, Node<Task>> mapHistory;
     private Node<Task> head;
     private Node<Task> tail;
 

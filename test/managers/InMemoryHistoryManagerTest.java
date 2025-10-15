@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import tasks.Status;
 import tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,19 +18,23 @@ class InMemoryHistoryManagerTest {
     private Task task1;
     private Task task2;
     private Task task3;
+    private Duration duration;
+    private LocalDateTime localDateTime;
 
     @BeforeEach
     void setUp() {
+        duration = Duration.ofMinutes(10);
+        localDateTime = LocalDateTime.now();
         historyManager = new InMemoryHistoryManager();
         // Создаем тестовые задачи
-        task1 = createTask(1,"Задача 1", Status.DONE);
-        task2 = createTask(2,"Задача 2", Status.NEW);
-        task3 = createTask(3,"Задача 3", Status.IN_PROGRESS);
+        task1 = createTask(1,"Задача 1", Status.DONE, duration, localDateTime);
+        task2 = createTask(2,"Задача 2", Status.NEW, duration, localDateTime);
+        task3 = createTask(3,"Задача 3", Status.IN_PROGRESS, duration, localDateTime);
     }
 
     // Вспомогательный метод для создания задач
-    private Task createTask(int id, String title, Status status) {
-        Task task = new Task(title, "Описание..", status);
+    private Task createTask(int id, String title, Status status, Duration duration, LocalDateTime localDateTime) {
+        Task task = new Task(title, "Описание..", status, duration, localDateTime);
         task.setId(id);
         return task;
     }
@@ -42,7 +48,7 @@ class InMemoryHistoryManagerTest {
 
         List<Task> history = historyManager.getHistory();
         assertEquals(1, history.size());
-        assertEquals(task1, history.get(0));
+        assertEquals(task1, history.getFirst());
     }
 
     @Test
@@ -67,7 +73,7 @@ class InMemoryHistoryManagerTest {
 
         List<Task> history = historyManager.getHistory();
         assertEquals(1, history.size());
-        assertEquals(task1, history.get(0));
+        assertEquals(task1, history.getFirst());
     }
 
     @Test
@@ -129,7 +135,7 @@ class InMemoryHistoryManagerTest {
 
         List<Task> history = historyManager.getHistory();
         assertEquals(1, history.size());
-        assertEquals(task1, history.get(0));
+        assertEquals(task1, history.getFirst());
     }
 
     // ========== ТЕСТЫ ДЛЯ МЕТОДА REMOVE ==========
@@ -238,7 +244,7 @@ class InMemoryHistoryManagerTest {
         historyManager.remove(task2);
 
         // Добавляем новую задачу
-        Task task4 = createTask(4,"Задача 4", Status.DONE);
+        Task task4 = createTask(4,"Задача 4", Status.DONE, duration, localDateTime);
         historyManager.add(task4);
 
         // Добавляем снова удаленную задачу

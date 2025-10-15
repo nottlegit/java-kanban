@@ -1,5 +1,8 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -7,18 +10,25 @@ public class Task {
     protected String title;
     protected String description;
     protected Status status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
-    public Task(String title, String description, Status status) {
+    public Task(String title, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.duration = duration == null ? Duration.ZERO : duration;
+        this.startTime = startTime;
     }
 
-    public Task(int id, String title, String description, Status status) {
+    public Task(
+            int id, String title, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
+        this.duration = duration == null ? Duration.ZERO : duration;
+        this.startTime = startTime;
     }
 
     public int getId() {
@@ -53,6 +63,17 @@ public class Task {
         this.status = status;
     }
 
+    public LocalDateTime getEndTime() {
+        if (startTime == null || duration == null) {
+            return null;
+        }
+        return startTime.plus(duration);
+    }
+
+    public LocalDateTime getStartTime() {
+        return this.startTime;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
@@ -65,13 +86,28 @@ public class Task {
         return Objects.hash(id);
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     @Override
     public String toString() {
-        return "tasks.Task{" +
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yy HH:mm");
+        return "Task{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime.format(formatter) +
                 '}';
     }
 }
