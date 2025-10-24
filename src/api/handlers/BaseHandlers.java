@@ -10,7 +10,6 @@ import com.sun.net.httpserver.HttpHandler;
 import managers.TaskManager;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -38,19 +37,19 @@ public abstract class BaseHandlers implements HttpHandler {
                     }
                 })
                 .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
-                    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd:MM:yyyy mm:ss");
+                    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm");
 
                     @Override
                     public void write(final JsonWriter jsonWriter,
                                       final LocalDateTime localDateTime) throws IOException {
-                        jsonWriter.value(localDateTime.format(dtf));
+                        jsonWriter.value(localDateTime.format(formatter));
                     }
 
                     @Override
                     public LocalDateTime read (final JsonReader jsonReader) throws IOException {
                         return LocalDateTime.parse(
                                 jsonReader.nextString(),
-                                dtf
+                                formatter
                         );
                     }
                 })
@@ -66,36 +65,35 @@ public abstract class BaseHandlers implements HttpHandler {
         }
     }
 
+    protected void send(HttpExchange exchange,
+                      byte[] responseBytes,
+                      int responseCode) throws IOException {
+        exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+        exchange.sendResponseHeaders(responseCode, responseBytes.length);
+        exchange.getResponseBody().write(responseBytes);
+        exchange.close();
+    }
+
     protected void sendText(HttpExchange exchange,
                             String responseString,
                             int responseCode) throws IOException {
-        try (OutputStream os = exchange.getResponseBody()) {
-            exchange.sendResponseHeaders(responseCode, 0);
-            os.write(responseString.getBytes(DEFAULT_CHARSET));
-        }
-        exchange.close();
+        byte[] responseBytes = responseString.getBytes(DEFAULT_CHARSET);
+
+        send(exchange,responseBytes, responseCode);
     }
 
     protected void sendInvalidId(HttpExchange exchange) throws IOException {
-        String responseString = "Некорректный идентификатор поста";
+        byte[] responseBytes = "Invalid ID".getBytes(DEFAULT_CHARSET);
         int responseCode = 400;
 
-        try (OutputStream os = exchange.getResponseBody()) {
-            exchange.sendResponseHeaders(responseCode, 0);
-            os.write(responseString.getBytes(DEFAULT_CHARSET));
-        }
-        exchange.close();
+        send(exchange,responseBytes, responseCode);
     }
 
     protected void sendNotFound(HttpExchange exchange) throws IOException {
-        String responseString = "Объект не найден";
+        byte[] responseBytes = "Not Found".getBytes(DEFAULT_CHARSET);
         int responseCode = 404;
 
-        try (OutputStream os = exchange.getResponseBody()) {
-            exchange.sendResponseHeaders(responseCode, 0);
-            os.write(responseString.getBytes(DEFAULT_CHARSET));
-        }
-        exchange.close();
+        send(exchange,responseBytes, responseCode);
     }
 
     abstract void handlerGet(HttpExchange httpExchange) throws IOException;

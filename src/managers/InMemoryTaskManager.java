@@ -1,5 +1,6 @@
 package managers;
 
+import managers.exceptions.HasTimeOverlapWithAnyException;
 import managers.exceptions.NotFoundException;
 import tasks.Epic;
 import tasks.Status;
@@ -57,7 +58,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void add(Task task) {
         if (isHasTimeOverlapWithAny(task)) {
-            return;
+            throw new HasTimeOverlapWithAnyException();
         }
         task.setId(nextId++);
         tasks.put(task.getId(), task);
@@ -67,7 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void update(Task task) {
         if (isHasTimeOverlapWithAny(task)) {
-            return;
+            throw new HasTimeOverlapWithAnyException();
         }
         tasks.put(task.getId(), task);
         updateInPrioritizedTasks(task);

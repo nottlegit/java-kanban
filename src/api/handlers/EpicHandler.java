@@ -18,7 +18,7 @@ public class EpicHandler extends TaskHandler {
     }
 
     @Override
-    void handlerPost(HttpExchange httpExchange, int id) {
+    void handlerPost(HttpExchange httpExchange) {
 
     }
 

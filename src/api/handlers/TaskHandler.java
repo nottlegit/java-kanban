@@ -1,15 +1,17 @@
 package api.handlers;
 
+import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import managers.TaskManager;
+import managers.exceptions.HasTimeOverlapWithAnyException;
 import managers.exceptions.NotFoundException;
 import tasks.Task;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-//List<Task> listTask = gson.fromJson("", new TypeToken<List<Task>>(){}.getType());
+
 public class TaskHandler extends BaseHandlers {
 
     public TaskHandler(TaskManager manager) {
@@ -22,57 +24,38 @@ public class TaskHandler extends BaseHandlers {
         Optional<Integer> idOptional = getTheIdFromThePath(httpExchange);
 
         if (idOptional.isEmpty()) {
-            if ("GET".equals(httpMethod)) {
-                System.out.println(1);
-                handlerGet(httpExchange);
-                return;
+            switch (httpMethod) {
+                case "GET":
+                    handlerGet(httpExchange);
+                    return;
+                case "POST":
+                    handlerPost(httpExchange);
+                    return;
+                default:
+                    sendInvalidId(httpExchange);
+                    return;
             }
-            sendInvalidId(httpExchange);
-            return;
         }
-
         int id = idOptional.get();
 
         switch (httpMethod) {
             case "GET":
                 handlerGetById(httpExchange, id);
                 break;
-            case "POST":
-                handlerPost(httpExchange, id);
-                break;
             case "DELETE":
                 handlerDelete(httpExchange, id);
                 break;
+            default:
+                break;
         }
-    }
-
-    protected void sendHasInteractions(HttpExchange exchange) throws IOException {
-        String responseString = "Задача пересекается с уже существующими";
-        int responseCode = 406;
-
-        try (OutputStream os = exchange.getResponseBody()) {
-            exchange.sendResponseHeaders(responseCode, 0);
-            os.write(responseString.getBytes(DEFAULT_CHARSET));
-        }
-        exchange.close();
     }
 
     @Override
     void handlerGet(HttpExchange httpExchange) throws IOException {
         List<Task> tasks = manager.getListTasks();
-        System.out.println(2);
-        try {
-            String json = gson.toJson(tasks);
-            System.out.println(json);
+        String json = gson.toJson(tasks);
 
-            sendText(httpExchange, json, 200);
-        } catch (IOException e) {
-            System.out.println(e);
-            throw new RuntimeException(e);
-        } catch (RuntimeException e) {
-            System.out.println(e);
-            throw new RuntimeException(e);
-        }
+        sendText(httpExchange, json, 200);
     }
 
     void handlerGetById(HttpExchange httpExchange, int id) throws IOException {
@@ -85,11 +68,64 @@ public class TaskHandler extends BaseHandlers {
         }
     }
 
-    void handlerPost(HttpExchange httpExchange, int id) throws IOException {
+    void handlerPost(HttpExchange httpExchange) throws IOException {
+        Optional<Task> taskOptional = parseTask(httpExchange.getRequestBody());
 
+        if(taskOptional.isEmpty()) {
+            sendInvalidId(httpExchange);
+            return;
+        }
+
+        Task task = taskOptional.get();
+
+        try {
+            if (task.getId() > 0) {
+                manager.update(task);
+            } else {
+                manager.add(task);
+            }
+            sendStatus(httpExchange, 201);
+        } catch (HasTimeOverlapWithAnyException e) {
+            System.out.println(e);
+            sendHasInteractions(httpExchange);
+        }
     }
 
     void handlerDelete(HttpExchange httpExchange, int id) throws IOException {
+        try {
+            manager.deleteTaskById(id);
+            sendStatus(httpExchange, 200);
+        } catch (NotFoundException e) {
+            sendNotFound(httpExchange);
+        }
+    }
 
+    protected void sendHasInteractions(HttpExchange exchange) throws IOException {
+        byte[] responseBytes = "Not Acceptable".getBytes(DEFAULT_CHARSET);
+        int responseCode = 406;
+
+        send(exchange, responseBytes, responseCode);
+    }
+
+    protected void sendInternalServerError(HttpExchange exchange) throws IOException {
+        byte[] responseBytes = "Internal Server Error".getBytes(DEFAULT_CHARSET);
+        int responseCode = 500;
+
+        send(exchange, responseBytes, responseCode);
+    }
+
+    protected void sendStatus(HttpExchange exchange, int responseCode) throws IOException {
+        exchange.sendResponseHeaders(responseCode, 0);
+        exchange.close();
+    }
+
+    private Optional<Task> parseTask(InputStream bodyInputStream) throws IOException {
+        String jsonString = new String(bodyInputStream.readAllBytes(), DEFAULT_CHARSET);
+
+        try {
+            return Optional.of(gson.fromJson(jsonString, Task.class));
+        } catch (JsonSyntaxException e) {
+            return Optional.empty();
+        }
     }
 }
