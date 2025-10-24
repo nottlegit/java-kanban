@@ -27,7 +27,6 @@ public class SubtaskHandler extends TaskHandler {
     @Override
     void handlerGetById(HttpExchange httpExchange, int id) throws IOException {
         try {
-            System.out.println(1);
             Subtask subtask = manager.getSubtaskById(id);
 
             sendText(httpExchange, gson.toJson(subtask), 200);
@@ -38,13 +37,13 @@ public class SubtaskHandler extends TaskHandler {
 
     @Override
     void handlerPost(HttpExchange httpExchange) throws IOException {
-        Optional<Subtask> taskOptional = parseSubtask(httpExchange.getRequestBody());
+        Optional<Subtask> subtaskOptional = parseSubtask(httpExchange.getRequestBody());
 
-        if(taskOptional.isEmpty()) {
+        if(subtaskOptional.isEmpty()) {
             sendInvalidId(httpExchange);
             return;
         }
-        Subtask subtask = taskOptional.get();
+        Subtask subtask = subtaskOptional.get();
 
         try {
             if (subtask.getId() > 0) {
