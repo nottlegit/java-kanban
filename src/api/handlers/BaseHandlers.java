@@ -18,12 +18,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.nio.charset.StandardCharsets;
 
-public abstract class BaseHandlersTasks implements HttpHandler {
+public abstract class BaseHandlers implements HttpHandler {
     protected final TaskManager manager;
     protected final Gson gson;
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    public BaseHandlersTasks(TaskManager manager) {
+    public BaseHandlers(TaskManager manager) {
         this.manager = manager;
         gson = new GsonBuilder()
                 .registerTypeAdapter(Duration.class, new TypeAdapter<Duration>() {

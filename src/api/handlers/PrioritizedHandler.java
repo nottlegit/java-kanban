@@ -3,7 +3,7 @@ package api.handlers;
 import com.sun.net.httpserver.HttpExchange;
 import managers.TaskManager;
 
-public class PrioritizedHandler extends BaseHandlersTasks {
+public class PrioritizedHandler extends BaseHandlers {
     public PrioritizedHandler(TaskManager manager) {
         super(manager);
     }

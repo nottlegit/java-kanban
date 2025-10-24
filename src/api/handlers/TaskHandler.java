@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 //List<Task> listTask = gson.fromJson("", new TypeToken<List<Task>>(){}.getType());
-public class TaskHandler extends BaseHandlersTasks {
+public class TaskHandler extends BaseHandlers {
 
     public TaskHandler(TaskManager manager) {
         super(manager);

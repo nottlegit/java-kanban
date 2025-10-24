@@ -3,7 +3,7 @@ package api.handlers;
 import com.sun.net.httpserver.HttpExchange;
 import managers.TaskManager;
 
-public class HistoryHandler extends BaseHandlersTasks {
+public class HistoryHandler extends BaseHandlers {
 
 
     public HistoryHandler(TaskManager taskManager) {
