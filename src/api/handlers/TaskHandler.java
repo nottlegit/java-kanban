@@ -86,18 +86,14 @@ public class TaskHandler extends BaseHandlers {
             }
             sendStatus(httpExchange, 201);
         } catch (HasTimeOverlapWithAnyException e) {
-            System.out.println(e);
+            System.out.println("Ошибка: " + e.getMessage());
             sendHasInteractions(httpExchange);
         }
     }
 
     void handlerDelete(HttpExchange httpExchange, int id) throws IOException {
-        try {
-            manager.deleteTaskById(id);
-            sendStatus(httpExchange, 200);
-        } catch (NotFoundException e) {
-            sendNotFound(httpExchange);
-        }
+        manager.deleteTaskById(id);
+        sendStatus(httpExchange, 200);
     }
 
     protected void sendHasInteractions(HttpExchange exchange) throws IOException {

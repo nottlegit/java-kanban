@@ -48,6 +48,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = tasks.get(id);
+
         if (task == null) {
             throw new NotFoundException();
         }
@@ -98,6 +99,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int idEpic) {
         Epic epic = epics.get(idEpic);
+
+        if (epic == null) {
+            throw new NotFoundException();
+        }
         historyManager.add(epic);
         return epic;
     }
@@ -158,6 +163,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(int idSubtasks) {
         Subtask subtask = subtasks.get(idSubtasks);
+
+        if (subtask == null) {
+            throw new NotFoundException();
+        }
         historyManager.add(subtask);
         return subtask;
     }
@@ -165,7 +174,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void add(Subtask subtask) {
         if (isHasTimeOverlapWithAny(subtask)) {
-            return;
+            throw new HasTimeOverlapWithAnyException();
         }
         Epic epic = epics.get(subtask.getIdEpic());
         int idEpic = epic.getId();
@@ -183,7 +192,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void update(Subtask subtask) {
         if (isHasTimeOverlapWithAny(subtask)) {
-            return;
+            throw new HasTimeOverlapWithAnyException();
         }
         Epic epic = epics.get(subtask.getIdEpic());
 
