@@ -46,6 +46,7 @@ public class TaskHandler extends BaseHandlers {
                 handlerDelete(httpExchange, id);
                 break;
             default:
+                sendInternalServerError(httpExchange);
                 break;
         }
     }

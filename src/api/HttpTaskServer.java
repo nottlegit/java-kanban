@@ -3,7 +3,6 @@ package api;
 import api.handlers.*;
 import com.sun.net.httpserver.HttpServer;
 import managers.TaskManager;
-import util.Managers;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,7 +10,7 @@ import java.net.InetSocketAddress;
 public class HttpTaskServer {
     private static final int PORT = 8080;
     private static final int BACKLOG = 0;
-    private TaskManager manager;
+    private final TaskManager manager;
     HttpServer httpServer;
 
     public HttpTaskServer(TaskManager manager) {
