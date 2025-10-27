@@ -36,6 +36,6 @@ public class PrioritizedHandler extends BaseHandlers {
         byte[] responseBytes = "Invalid Request".getBytes(DEFAULT_CHARSET);
         int responseCode = 400;
 
-        send(exchange,responseBytes, responseCode);
+        send(exchange, responseBytes, responseCode);
     }
 }
