@@ -32,7 +32,7 @@ public abstract class BaseHandlers implements HttpHandler {
                     }
 
                     @Override
-                    public Duration read (final JsonReader jsonReader) throws IOException {
+                    public Duration read(final JsonReader jsonReader) throws IOException {
                         return Duration.ofMinutes(jsonReader.nextLong());
                     }
                 })
@@ -50,7 +50,7 @@ public abstract class BaseHandlers implements HttpHandler {
                     }
 
                     @Override
-                    public LocalDateTime read (final JsonReader jsonReader) throws IOException {
+                    public LocalDateTime read(final JsonReader jsonReader) throws IOException {
                         return LocalDateTime.parse(
                                 jsonReader.nextString(),
                                 formatter
@@ -70,8 +70,8 @@ public abstract class BaseHandlers implements HttpHandler {
     }
 
     protected void send(HttpExchange exchange,
-                      byte[] responseBytes,
-                      int responseCode) throws IOException {
+                        byte[] responseBytes,
+                        int responseCode) throws IOException {
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         exchange.sendResponseHeaders(responseCode, responseBytes.length);
         exchange.getResponseBody().write(responseBytes);
@@ -82,21 +82,21 @@ public abstract class BaseHandlers implements HttpHandler {
         int responseCode = 200;
         byte[] responseBytes = responseString.getBytes(DEFAULT_CHARSET);
 
-        send(exchange,responseBytes, responseCode);
+        send(exchange, responseBytes, responseCode);
     }
 
     protected void sendInvalidId(HttpExchange exchange) throws IOException {
         byte[] responseBytes = "Invalid ID".getBytes(DEFAULT_CHARSET);
         int responseCode = 400;
 
-        send(exchange,responseBytes, responseCode);
+        send(exchange, responseBytes, responseCode);
     }
 
     protected void sendNotFound(HttpExchange exchange) throws IOException {
         byte[] responseBytes = "Not Found".getBytes(DEFAULT_CHARSET);
         int responseCode = 404;
 
-        send(exchange,responseBytes, responseCode);
+        send(exchange, responseBytes, responseCode);
     }
 
     abstract void handlerGet(HttpExchange httpExchange) throws IOException;
