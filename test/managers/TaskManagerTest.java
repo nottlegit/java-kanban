@@ -1,7 +1,6 @@
 package managers;
 
 import managers.exceptions.HasTimeOverlapWithAnyException;
-import managers.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

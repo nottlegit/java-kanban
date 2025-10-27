@@ -22,14 +22,15 @@ public class EpicHandler extends TaskHandler {
         List<Epic> epics = manager.getListEpics();
         String json = gson.toJson(epics);
 
-        sendText(httpExchange, json, 200);
+        sendText(httpExchange, json);
     }
+
     @Override
     void handlerGetById(HttpExchange httpExchange, int id) throws IOException {
         try {
             Epic epic = manager.getEpicById(id);
 
-            sendText(httpExchange, gson.toJson(epic), 200);
+            sendText(httpExchange, gson.toJson(epic));
         } catch (NotFoundException e) {
             sendNotFound(httpExchange);
         }

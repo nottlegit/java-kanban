@@ -42,7 +42,11 @@ public abstract class BaseHandlers implements HttpHandler {
                     @Override
                     public void write(final JsonWriter jsonWriter,
                                       final LocalDateTime localDateTime) throws IOException {
-                        jsonWriter.value(localDateTime.format(formatter));
+                        if (localDateTime == null) {
+                            jsonWriter.nullValue();
+                        } else {
+                            jsonWriter.value(localDateTime.format(formatter));
+                        }
                     }
 
                     @Override
@@ -74,9 +78,8 @@ public abstract class BaseHandlers implements HttpHandler {
         exchange.close();
     }
 
-    protected void sendText(HttpExchange exchange,
-                            String responseString,
-                            int responseCode) throws IOException {
+    protected void sendText(HttpExchange exchange, String responseString) throws IOException {
+        int responseCode = 200;
         byte[] responseBytes = responseString.getBytes(DEFAULT_CHARSET);
 
         send(exchange,responseBytes, responseCode);

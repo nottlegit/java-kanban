@@ -22,14 +22,14 @@ public class SubtaskHandler extends TaskHandler {
         List<Subtask> tasks = manager.getListSubtasks();
         String json = gson.toJson(tasks);
 
-        sendText(httpExchange, json, 200);
+        sendText(httpExchange, json);
     }
     @Override
     void handlerGetById(HttpExchange httpExchange, int id) throws IOException {
         try {
             Subtask subtask = manager.getSubtaskById(id);
 
-            sendText(httpExchange, gson.toJson(subtask), 200);
+            sendText(httpExchange, gson.toJson(subtask));
         } catch (NotFoundException e) {
             sendNotFound(httpExchange);
         }

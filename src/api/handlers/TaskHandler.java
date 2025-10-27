@@ -55,14 +55,14 @@ public class TaskHandler extends BaseHandlers {
         List<Task> tasks = manager.getListTasks();
         String json = gson.toJson(tasks);
 
-        sendText(httpExchange, json, 200);
+        sendText(httpExchange, json);
     }
 
     void handlerGetById(HttpExchange httpExchange, int id) throws IOException {
         try {
             Task task = manager.getTaskById(id);
 
-            sendText(httpExchange, gson.toJson(task), 200);
+            sendText(httpExchange, gson.toJson(task));
         } catch (NotFoundException e) {
             sendNotFound(httpExchange);
         }

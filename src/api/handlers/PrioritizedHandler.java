@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class PrioritizedHandler extends BaseHandlers {
+
     public PrioritizedHandler(TaskManager manager) {
         super(manager);
     }
@@ -16,7 +17,7 @@ public class PrioritizedHandler extends BaseHandlers {
     public void handle(HttpExchange httpExchange) throws IOException {
         String httpMethod = httpExchange.getRequestMethod();
 
-        if ("GET".equals(httpMethod)) {
+        if (!"GET".equals(httpMethod)) {
             sendInvalidRequest(httpExchange);
             return;
         }
@@ -28,7 +29,7 @@ public class PrioritizedHandler extends BaseHandlers {
         List<Task> tasks = manager.getPrioritizedTasks();
         String json = gson.toJson(tasks);
 
-        sendText(httpExchange, json, 200);
+        sendText(httpExchange, json);
     }
 
     private void sendInvalidRequest(HttpExchange exchange) throws IOException {
