@@ -40,7 +40,7 @@ public class EpicHandler extends TaskHandler {
     void handlerPost(HttpExchange httpExchange) throws IOException {
         Optional<Epic> epicOptional = parseEpic(httpExchange.getRequestBody());
 
-        if(epicOptional.isEmpty()) {
+        if (epicOptional.isEmpty()) {
             sendInvalidId(httpExchange);
             return;
         }
