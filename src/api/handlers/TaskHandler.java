@@ -71,7 +71,7 @@ public class TaskHandler extends BaseHandlers {
     void handlerPost(HttpExchange httpExchange) throws IOException {
         Optional<Task> taskOptional = parseTask(httpExchange.getRequestBody());
 
-        if(taskOptional.isEmpty()) {
+        if (taskOptional.isEmpty()) {
             sendInvalidId(httpExchange);
             return;
         }
