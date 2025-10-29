@@ -20,15 +20,15 @@ public class TaskHandler extends BaseHandlers {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String httpMethod = httpExchange.getRequestMethod();
+        HttpMethod httpMethod = HttpMethod.valueOf(httpExchange.getRequestMethod());
         Optional<Integer> idOptional = getTheIdFromThePath(httpExchange);
 
         if (idOptional.isEmpty()) {
             switch (httpMethod) {
-                case "GET":
+                case GET:
                     handlerGet(httpExchange);
                     return;
-                case "POST":
+                case POST:
                     handlerPost(httpExchange);
                     return;
                 default:
@@ -39,10 +39,10 @@ public class TaskHandler extends BaseHandlers {
         int id = idOptional.get();
 
         switch (httpMethod) {
-            case "GET":
+            case GET:
                 handlerGetById(httpExchange, id);
                 break;
-            case "DELETE":
+            case DELETE:
                 handlerDelete(httpExchange, id);
                 break;
             default:
