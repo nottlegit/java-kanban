@@ -62,9 +62,10 @@ public abstract class BaseHandlers implements HttpHandler {
 
     protected Optional<Integer> getTheIdFromThePath(HttpExchange exchange) {
         String[] pathParts = exchange.getRequestURI().getPath().split("/");
+
         try {
             return Optional.of(Integer.parseInt(pathParts[2]));
-        } catch (RuntimeException e) {
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             return Optional.empty();
         }
     }
