@@ -11,7 +11,7 @@ public class HttpTaskServer {
     private static final int PORT = 8080;
     private static final int BACKLOG = 0;
     private final TaskManager manager;
-    HttpServer httpServer;
+    private HttpServer httpServer;
 
     public HttpTaskServer(TaskManager manager) {
         this.manager = manager;
