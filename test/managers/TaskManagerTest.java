@@ -1,5 +1,6 @@
 package managers;
 
+import managers.exceptions.HasTimeOverlapWithAnyException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -266,7 +267,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
                 Status.NEW, Duration.ofMinutes(120), localDateTime.minus(Duration.ofDays(1)));
 
         manager.add(task);
-        manager.add(task2);
+        try {
+            manager.add(task2);
+        } catch (HasTimeOverlapWithAnyException e) {
+            System.out.println("Задача не добавлена, есть пересечение");
+        }
 
         List<Task> tasks = manager.getListTasks();
         assertEquals(1, tasks.size(),
